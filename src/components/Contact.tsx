@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { objectTypes, services } from '../data/content'
+import emailjs from '@emailjs/browser'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
 
@@ -22,18 +23,41 @@ const fieldClass =
 const labelClass = 'mb-2 block text-sm font-semibold text-slate-800'
 
 export function Contact() {
-  const [submittedData, setSubmittedData] = useState<ContactFormValues | null>(null)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ContactFormValues>()
 
-  const onSubmit: SubmitHandler<ContactFormValues> = (data) => {
-    // TODO: Add email/backend integration here when a contact endpoint is available.
-    setSubmittedData(data)
-    reset()
+  const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
+    setSubmitStatus('loading')
+    try {
+      // ВАЖНО: Заменете тези стрингове с вашите реални ключове от EmailJS!
+      const serviceId = 'YOUR_SERVICE_ID'
+      const templateId = 'YOUR_TEMPLATE_ID'
+      const publicKey = 'YOUR_PUBLIC_KEY'
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          objectType: data.objectType,
+          service: data.service,
+          message: data.message,
+        },
+        publicKey
+      )
+      setSubmitStatus('success')
+      reset()
+    } catch (error) {
+      console.error('Email sending failed:', error)
+      setSubmitStatus('error')
+    }
   }
 
   return (
@@ -81,16 +105,25 @@ export function Contact() {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
           >
-            {submittedData ? (
+            {submitStatus === 'success' && (
               <div
-                className="mb-6 rounded-md border border-primary-200 bg-primary-50 px-4 py-3 text-sm font-medium text-primary-900"
+                className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900"
                 role="status"
                 aria-live="polite"
               >
-                Благодарим, {submittedData.name}. Заявката е записана локално и е готова за
-                бъдеща email или backend интеграция.
+                Благодарим! Вашето запитване беше изпратено успешно. Ще се свържем с Вас скоро.
               </div>
-            ) : null}
+            )}
+            
+            {submitStatus === 'error' && (
+              <div
+                className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900"
+                role="status"
+                aria-live="polite"
+              >
+                Възникна грешка при изпращането. Моля, опитайте отново по-късно или се свържете с нас по телефона.
+              </div>
+            )}
 
             <div className="grid gap-5 sm:grid-cols-2">
               <Field label="Име" error={errors.name?.message}>
@@ -178,10 +211,10 @@ export function Contact() {
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm leading-6 text-slate-500">
-                Няма изпращане към сървър. Формата е подготвена за бъдеща интеграция.
+                Вашите данни са защитени и се изпращат сигурно.
               </p>
-              <Button type="submit" disabled={isSubmitting}>
-                Изпрати запитване
+              <Button type="submit" disabled={submitStatus === 'loading'}>
+                {submitStatus === 'loading' ? 'Изпращане...' : 'Изпрати запитване'}
               </Button>
             </div>
           </form>
