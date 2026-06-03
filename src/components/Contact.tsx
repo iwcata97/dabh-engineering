@@ -55,18 +55,18 @@ export function Contact() {
               </p>
               <div className="mt-6 grid gap-4">
                 <a
-                  href="tel:+359XXXXXXXXX"
+                  href="tel:+359876150800"
                   className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
                 >
                   <Phone aria-hidden="true" className="size-5 text-primary-600" />
-                  <span>+359 XXX XXX XXX</span>
+                  <span>+359 876 150 800</span>
                 </a>
                 <a
-                  href="mailto:office@dabh-engineering.bg"
+                  href="mailto:dabhengineering@gmail.com"
                   className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
                 >
                   <Mail aria-hidden="true" className="size-5 text-primary-600" />
-                  <span>office@dabh-engineering.bg</span>
+                  <span>dabhengineering@gmail.com</span>
                 </a>
                 <div className="flex items-center gap-3 text-slate-700">
                   <MapPin aria-hidden="true" className="size-5 text-primary-600" />

@@ -44,8 +44,8 @@ export function Footer() {
             <div>
               <h2 className="text-sm font-semibold uppercase text-primary-200">Контакт</h2>
               <ul className="mt-4 grid gap-3 text-sm text-slate-300">
-                <li>+359 XXX XXX XXX</li>
-                <li>office@dabh-engineering.bg</li>
+                <li>+359 876 150 800</li>
+                <li>dabhengineering@gmail.com</li>
                 <li>България</li>
               </ul>
             </div>
