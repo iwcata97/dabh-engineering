@@ -46,7 +46,7 @@ export function Footer() {
               <ul className="mt-4 grid gap-3 text-sm text-slate-300">
                 <li>+359 876 150 800</li>
                 <li>dabhengineering@gmail.com</li>
-                <li>България</li>
+                <li>Област Плевен, България</li>
               </ul>
             </div>
           </div>

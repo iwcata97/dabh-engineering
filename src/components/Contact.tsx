@@ -70,7 +70,7 @@ export function Contact() {
                 </a>
                 <div className="flex items-center gap-3 text-slate-700">
                   <MapPin aria-hidden="true" className="size-5 text-primary-600" />
-                  <span>България</span>
+                  <span>Област Плевен, България</span>
                 </div>
               </div>
             </div>
