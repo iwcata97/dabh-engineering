@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { objectTypes, services } from '../data/content'
+import emailjs from '@emailjs/browser'
 import { supabase } from '../lib/supabase'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
@@ -34,6 +35,7 @@ export function Contact() {
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
     setSubmitStatus('loading')
     try {
+      // 1. Записваме в Supabase
       const { error } = await supabase
         .from('contact_requests')
         .insert([
@@ -48,6 +50,26 @@ export function Contact() {
         ])
 
       if (error) throw error
+
+      // 2. Изпращаме имейли чрез EmailJS
+      // ВАЖНО: Замени тези стрингове с твоите реални ключове!
+      const serviceId = 'YOUR_SERVICE_ID'
+      const templateId = 'YOUR_TEMPLATE_ID'
+      const publicKey = 'YOUR_PUBLIC_KEY'
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          objectType: data.objectType,
+          service: data.service,
+          message: data.message,
+        },
+        publicKey
+      )
 
       setSubmitStatus('success')
       reset()
