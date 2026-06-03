@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #142238;
+  background: #f6fafb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+::selection {
+  color: #06111f;
+  background: #76f3ff;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: 0;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    outline-color: #0ea5b7;
+  }
+}
+
+@layer components {
+  .container-shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .eyebrow {
+    @apply mb-3 text-sm font-semibold uppercase text-primary-600;
+  }
+
+  .section-title {
+    @apply text-3xl font-semibold leading-tight text-navy-950 sm:text-4xl lg:text-5xl;
+  }
+
+  .section-copy {
+    @apply mt-4 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg;
+  }
+
+  .glass-panel {
+    @apply border border-white/20 bg-white/75 shadow-soft backdrop-blur-xl;
+  }
+
+  .dark-panel {
+    @apply border border-white/10 bg-white/[0.06] shadow-glow backdrop-blur-xl;
+  }
+}
+
+.technical-grid {
+  background-image:
+    linear-gradient(rgba(14, 165, 183, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 183, 0.12) 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.18), transparent 26rem),
+    radial-gradient(circle at 88% 12%, rgba(45, 212, 191, 0.14), transparent 28rem);
+  background-size: 42px 42px, 42px 42px, auto, auto;
+}
+
+.soft-grid {
+  background-image:
+    linear-gradient(rgba(8, 26, 44, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 26, 44, 0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.signal-line {
+  stroke-dasharray: 10 14;
+  animation: signal-flow 14s linear infinite;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@keyframes signal-flow {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
