@@ -52,10 +52,13 @@ export function Contact() {
       if (error) throw error
 
       // 2. Изпращаме имейли чрез EmailJS
-      // ВАЖНО: Замени тези стрингове с твоите реални ключове!
-      const serviceId = 'YOUR_SERVICE_ID'
-      const templateId = 'YOUR_TEMPLATE_ID'
-      const publicKey = 'YOUR_PUBLIC_KEY'
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS keys are missing')
+      }
 
       await emailjs.send(
         serviceId,
@@ -87,8 +90,7 @@ export function Contact() {
             <p className="eyebrow">Контакт</p>
             <h2 className="section-title">Заявете консултация за вашия обект</h2>
             <p className="section-copy">
-              Попълнете кратката форма и опишете какъв тип система ви интересува. Данните се
-              пазят само локално в текущото приложение, докато бъде добавена реална интеграция.
+              Попълнете кратката форма и опишете какъв тип система ви интересува. Ние ще се свържем с вас възможно най-скоро.
             </p>
 
             <div className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-soft">
@@ -160,8 +162,14 @@ export function Contact() {
                   className={fieldClass}
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+359..."
-                  {...register('phone', { required: 'Моля, въведете телефон.' })}
+                  placeholder="08... или +359..."
+                  {...register('phone', {
+                    required: 'Моля, въведете телефон.',
+                    pattern: {
+                      value: /^(?:\+359|0)\d{9}$/,
+                      message: 'Въведете валиден формат (напр. 08... или +359...).',
+                    },
+                  })}
                 />
               </Field>
 
@@ -246,7 +254,9 @@ export function Contact() {
 function Field({ children, error, label }: { children: ReactNode; error?: string; label: string }) {
   return (
     <label className="block">
-      <span className={labelClass}>{label}</span>
+      <span className={labelClass}>
+        {label} <span className="text-red-500">*</span>
+      </span>
       {children}
       {error ? <span className="mt-2 block text-sm font-medium text-red-600">{error}</span> : null}
     </label>
