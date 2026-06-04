@@ -21,8 +21,8 @@ export function Header() {
             onClick={closeMenu}
             aria-label="DABH Engineering начало"
           >
-            <span className="flex size-10 items-center justify-center rounded-md bg-navy-950 text-primary-300 shadow-glow">
-              <ShieldCheck aria-hidden="true" className="size-5" />
+            <span className="flex size-10 items-center justify-center overflow-hidden rounded-md bg-navy-950 shadow-glow">
+              <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-full object-cover" />
             </span>
             <span className="flex flex-col leading-none">
               <span className="text-sm font-bold text-navy-950 sm:text-base">DABH Engineering</span>

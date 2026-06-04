@@ -14,9 +14,9 @@ export function Footer() {
               className="inline-flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
               aria-label="DABH Engineering начало"
             >
-              <span className="flex size-10 items-center justify-center rounded-md bg-primary-300 text-navy-950">
-                <ShieldCheck aria-hidden="true" className="size-5" />
-              </span>
+                <span className="flex size-10 items-center justify-center overflow-hidden rounded-md bg-navy-950 shadow-glow">
+                  <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-full object-cover" />
+                </span>
               <span className="font-semibold">DABH Engineering</span>
             </a>
             <p className="mt-4 max-w-md text-sm leading-6 text-slate-300">

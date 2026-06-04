@@ -74,7 +74,7 @@ export function Hero() {
               transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             >
               <div className="absolute inset-3 rounded-md border border-white/10" />
-              <ShieldCheck className="size-14 text-primary-300 sm:size-16" strokeWidth={1.7} />
+              <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-16 rounded-md object-contain sm:size-20" />
               <Cpu className="absolute bottom-5 right-5 size-6 text-primary-100/80" />
               <LockKeyhole className="absolute left-5 top-5 size-6 text-primary-100/80" />
             </motion.div>
