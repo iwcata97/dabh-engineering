@@ -162,8 +162,14 @@ export function Contact() {
                   className={fieldClass}
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+359..."
-                  {...register('phone', { required: 'Моля, въведете телефон.' })}
+                  placeholder="08... или +359..."
+                  {...register('phone', {
+                    required: 'Моля, въведете телефон.',
+                    pattern: {
+                      value: /^(?:\+359|0)\d{9}$/,
+                      message: 'Въведете валиден формат (напр. 08... или +359...).',
+                    },
+                  })}
                 />
               </Field>
 
@@ -248,7 +254,9 @@ export function Contact() {
 function Field({ children, error, label }: { children: ReactNode; error?: string; label: string }) {
   return (
     <label className="block">
-      <span className={labelClass}>{label}</span>
+      <span className={labelClass}>
+        {label} <span className="text-red-500">*</span>
+      </span>
       {children}
       {error ? <span className="mt-2 block text-sm font-medium text-red-600">{error}</span> : null}
     </label>
