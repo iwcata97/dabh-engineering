@@ -8,6 +8,7 @@ import emailjs from '@emailjs/browser'
 import { supabase } from '../lib/supabase'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
+import { PrivacyPolicy } from './PrivacyPolicy'
 
 type ContactFormValues = {
   name: string
@@ -25,6 +26,7 @@ const labelClass = 'mb-2 block text-sm font-semibold text-slate-800'
 
 export function Contact() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
   const {
     register,
     handleSubmit,
@@ -83,7 +85,8 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="section-padding bg-mist soft-grid">
+    <>
+      <section id="contact" className="section-padding bg-mist soft-grid">
       <div className="container-shell">
         <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
           <div>
@@ -238,7 +241,14 @@ export function Contact() {
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm leading-6 text-slate-500">
-                Вашите данни са защитени и се изпращат сигурно.
+                Вашите данни са защитени. С изпращането на запитването се съгласявате с нашата{' '}
+                <button
+                  type="button"
+                  onClick={() => setIsPrivacyOpen(true)}
+                  className="font-medium text-primary-600 underline underline-offset-2 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded"
+                >
+                  Политика за поверителност
+                </button>.
               </p>
               <Button type="submit" disabled={submitStatus === 'loading'}>
                 {submitStatus === 'loading' ? 'Изпращане...' : 'Изпрати запитване'}
@@ -248,6 +258,9 @@ export function Contact() {
         </div>
       </div>
     </section>
+
+      <PrivacyPolicy isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
+    </>
   )
 }
 

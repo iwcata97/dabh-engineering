@@ -37,7 +37,7 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-navy-950/80 px-4 py-12 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-950/80 px-4 py-8 backdrop-blur-sm"
           onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
           role="dialog"
           aria-modal="true"
@@ -48,10 +48,10 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="relative w-full max-w-3xl rounded-2xl bg-white shadow-2xl"
+            className="relative flex w-full max-w-3xl flex-col rounded-2xl bg-white shadow-2xl max-h-[90vh]"
           >
-            {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-2xl bg-navy-950 px-6 py-5">
+            {/* Header – never scrolls */}
+            <div className="flex shrink-0 items-center justify-between rounded-t-2xl bg-navy-950 px-6 py-5">
               <div className="flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-lg bg-primary-500/20">
                   <Shield className="size-5 text-primary-300" />
@@ -72,8 +72,8 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
               </button>
             </div>
 
-            {/* Content */}
-            <div className="px-6 py-8 sm:px-10 sm:py-10 text-slate-700 text-sm leading-7">
+            {/* Content – scrolls independently */}
+            <div className="flex-1 overflow-y-auto px-6 py-8 sm:px-10 sm:py-10 text-slate-700 text-sm leading-7">
 
               <p className="text-slate-500 text-xs uppercase tracking-widest font-semibold mb-6">
                 Последна актуализация: {new Date().getFullYear()} г.
@@ -183,8 +183,8 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
               </Section>
             </div>
 
-            {/* Footer */}
-            <div className="flex justify-end rounded-b-2xl border-t border-slate-100 bg-slate-50 px-6 py-4 sm:px-10">
+            {/* Footer – never scrolls */}
+            <div className="flex shrink-0 justify-end rounded-b-2xl border-t border-slate-100 bg-slate-50 px-6 py-4 sm:px-10">
               <button
                 onClick={onClose}
                 className="rounded-lg bg-navy-950 px-5 py-2 text-sm font-semibold text-white transition hover:bg-navy-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
