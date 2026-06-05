@@ -51,8 +51,9 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-8 border-t border-white/10 pt-6 text-sm text-slate-400">
-          © {year} DABH Engineering Ltd. / ДАБХ Инженеринг ЕООД. Всички права запазени.
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row">
+          <p>© {year} DABH Engineering Ltd. / ДАБХ Инженеринг ЕООД. Всички права запазени.</p>
+          <p>ЕИК: 208163364</p>
         </div>
       </div>
     </footer>
