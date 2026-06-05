@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
-import { Mail, MapPin, Phone } from 'lucide-react'
+import { Mail, MapPin, Phone, ShieldCheck, Send, Loader2 } from 'lucide-react'
 import { objectTypes, services } from '../data/content'
 import emailjs from '@emailjs/browser'
 import { supabase } from '../lib/supabase'
 import { cn } from '../lib/utils'
-import { Button } from './ui/Button'
 import { PrivacyPolicy } from './PrivacyPolicy'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 type ContactFormValues = {
   name: string
@@ -27,14 +27,34 @@ const labelClass = 'mb-2 block text-sm font-semibold text-slate-800'
 export function Contact() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const [recaptchaError, setRecaptchaError] = useState(false)
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<ContactFormValues>()
 
+  const watchedValues = watch()
+  const isFormReady =
+    !!recaptchaToken &&
+    !!watchedValues.name?.trim() &&
+    !!watchedValues.phone?.trim() &&
+    !!watchedValues.email?.trim() &&
+    !!watchedValues.objectType &&
+    !!watchedValues.service &&
+    !!watchedValues.message?.trim()
+
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
+    // Проверка дали reCAPTCHA е потвърдена
+    if (!recaptchaToken) {
+      setRecaptchaError(true)
+      return
+    }
+    setRecaptchaError(false)
     setSubmitStatus('loading')
     try {
       // 1. Записваме в Supabase
@@ -78,6 +98,8 @@ export function Contact() {
 
       setSubmitStatus('success')
       reset()
+      setRecaptchaToken(null)
+      recaptchaRef.current?.reset()
     } catch (error) {
       console.error('Submission failed:', error)
       setSubmitStatus('error')
@@ -239,7 +261,39 @@ export function Contact() {
               </Field>
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* reCAPTCHA v2 */}
+            <div className="mt-6">
+              <div
+                className={cn(
+                  'flex flex-col gap-2 rounded-lg border p-4 transition-colors',
+                  recaptchaError
+                    ? 'border-red-300 bg-red-50'
+                    : 'border-slate-200 bg-slate-50'
+                )}
+              >
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                  <ShieldCheck aria-hidden="true" className="size-3.5 text-primary-500" />
+                  <span>Потвърдете, че не сте робот</span>
+                </div>
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY ?? ''}
+                  onChange={(token) => {
+                    setRecaptchaToken(token)
+                    if (token) setRecaptchaError(false)
+                  }}
+                  onExpired={() => setRecaptchaToken(null)}
+                  hl="bg"
+                />
+                {recaptchaError && (
+                  <span className="text-sm font-medium text-red-600">
+                    Моля, потвърдете, че не сте робот.
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm leading-6 text-slate-500">
                 Вашите данни са защитени. С изпращането на запитването се съгласявате с нашата{' '}
                 <button
@@ -250,9 +304,7 @@ export function Contact() {
                   Политика за поверителност
                 </button>.
               </p>
-              <Button type="submit" disabled={submitStatus === 'loading'}>
-                {submitStatus === 'loading' ? 'Изпращане...' : 'Изпрати запитване'}
-              </Button>
+              <SubmitButton isReady={isFormReady} isLoading={submitStatus === 'loading'} />
             </div>
           </form>
         </div>
@@ -273,5 +325,47 @@ function Field({ children, error, label }: { children: ReactNode; error?: string
       {children}
       {error ? <span className="mt-2 block text-sm font-medium text-red-600">{error}</span> : null}
     </label>
+  )
+}
+
+function SubmitButton({ isReady, isLoading }: { isReady: boolean; isLoading: boolean }) {
+  return (
+    <button
+      type="submit"
+      disabled={!isReady || isLoading}
+      className={cn(
+        'relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-md px-6 text-sm font-semibold transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 sm:text-base',
+        isReady && !isLoading
+          ? 'bg-primary-500 text-navy-950 shadow-glow hover:bg-primary-400 hover:-translate-y-0.5 active:scale-95 cursor-pointer'
+          : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none border border-slate-200',
+      )}
+    >
+      {/* Pulse glow — видим само когато е готов */}
+      {isReady && !isLoading && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-md animate-pulse bg-primary-300/25"
+        />
+      )}
+      <span className="relative flex items-center gap-2">
+        {isLoading ? (
+          <>
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+            Изпращане...
+          </>
+        ) : (
+          <>
+            Изпрати запитване
+            <Send
+              className={cn(
+                'size-4 transition-all duration-300',
+                isReady ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-1',
+              )}
+              aria-hidden="true"
+            />
+          </>
+        )}
+      </span>
+    </button>
   )
 }
