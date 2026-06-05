@@ -51,7 +51,6 @@ export function Footer() {
                   <li>+359 876 150 800</li>
                   <li>dabhengineering@gmail.com</li>
                   <li>Област Плевен, България</li>
-                  <li>Седалище: гр. Плевен, ул. Асен Халачев 16</li>
                   <li>
                     <button
                       onClick={() => setIsPrivacyOpen(true)}
