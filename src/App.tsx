@@ -7,6 +7,7 @@ import { Process } from './components/Process'
 import { Sectors } from './components/Sectors'
 import { Services } from './components/Services'
 import { Values } from './components/Values'
+import { CookieConsent } from './components/CookieConsent'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <CookieConsent />
     </>
   )
 }
