@@ -3,6 +3,24 @@ import type { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 import { Mail, MapPin, Phone, ShieldCheck, Send, Loader2 } from 'lucide-react'
+
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+    </svg>
+  )
+}
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+    </svg>
+  )
+}
 import { objectTypes, services } from '../data/content'
 import emailjs from '@emailjs/browser'
 import { supabase } from '../lib/supabase'
@@ -141,6 +159,30 @@ export function Contact() {
                 <div className="flex items-center gap-3 text-slate-700">
                   <MapPin aria-hidden="true" className="size-5 text-primary-600" />
                   <span>Област Плевен, България</span>
+                </div>
+              </div>
+              
+              <div className="mt-8">
+                <p className="mb-3 text-sm font-medium text-slate-500">Последвайте ни</p>
+                <div className="flex items-center gap-4">
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61572936225566"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                    aria-label="Facebook"
+                  >
+                    <FacebookIcon className="size-5" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/dabhengineering/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                    aria-label="Instagram"
+                  >
+                    <InstagramIcon className="size-5" />
+                  </a>
                 </div>
               </div>
             </div>

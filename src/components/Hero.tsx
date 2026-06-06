@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, CheckCircle2, Cpu, LockKeyhole, ShieldCheck } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Cpu, LockKeyhole } from 'lucide-react'
 import { heroNodes, trustItems } from '../data/content'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
