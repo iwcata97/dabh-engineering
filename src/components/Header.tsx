@@ -1,15 +1,39 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Menu, ShieldCheck, X } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowRight, Menu, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { navLinks } from '../data/content'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('#home')
   const reducedMotion = useReducedMotion()
 
   const closeMenu = () => setIsOpen(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`)
+          }
+        })
+      },
+      { rootMargin: '-50% 0px -50% 0px' }
+    )
+
+    navLinks.forEach((link) => {
+      const id = link.href.substring(1)
+      const element = document.getElementById(id)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
@@ -31,15 +55,24 @@ export function Header() {
           </a>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Основна навигация">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.href
+
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
+                    isActive
+                      ? 'bg-primary-50 text-primary-600'
+                      : 'text-slate-700 hover:bg-slate-100 hover:text-navy-950'
+                  )}
+                >
+                  {link.label}
+                </a>
+              )
+            })}
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
@@ -70,16 +103,25 @@ export function Header() {
               transition={{ duration: 0.2 }}
             >
               <div className="grid gap-1 p-3">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="rounded-md px-4 py-3 text-base font-semibold text-slate-700 transition hover:bg-primary-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
-                    onClick={closeMenu}
-                  >
-                    {link.label}
-                  </a>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = activeSection === link.href
+
+                  return (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className={cn(
+                        'rounded-md px-4 py-3 text-base font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
+                        isActive
+                          ? 'bg-primary-50 text-primary-600'
+                          : 'text-slate-700 hover:bg-primary-50 hover:text-navy-950'
+                      )}
+                      onClick={closeMenu}
+                    >
+                      {link.label}
+                    </a>
+                  )
+                })}
                 <Button href="#contact" className="mt-2 w-full" icon={ArrowRight} onClick={closeMenu}>
                   Заявете консултация
                 </Button>
