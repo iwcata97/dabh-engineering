@@ -90,8 +90,8 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
                   Администратор на лични данни е <strong className="text-navy-950">"ДАБХ Инженеринг" ЕООД</strong>,
                   ЕИК <strong className="text-navy-950">208163364</strong>, със седалище и адрес на управление:
                   гр. Плевен, ул. Асен Халачев 16. При въпроси можете да се свържете с нас на имейл:{' '}
-                  <a href="mailto:dabhengineering@gmail.com" className="text-primary-600 hover:underline font-medium">
-                    dabhengineering@gmail.com
+                  <a href="mailto:dabhengineering.eu@gmail.com" className="text-primary-600 hover:underline font-medium">
+                    dabhengineering.eu@gmail.com
                   </a>{' '}
                   или на телефон:{' '}
                   <a href="tel:+359876150800" className="text-primary-600 hover:underline font-medium">

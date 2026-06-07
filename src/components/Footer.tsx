@@ -75,7 +75,7 @@ export function Footer() {
                 <h2 className="text-sm font-semibold uppercase text-primary-200">Контакт</h2>
                 <ul className="mt-4 grid gap-3 text-sm text-slate-300">
                   <li>+359 876 150 800</li>
-                  <li>dabhengineering@gmail.com</li>
+                  <li>dabhengineering.eu@gmail.com</li>
                   <li>Област Плевен, България</li>
                   <li>
                     <button
