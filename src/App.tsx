@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { Contact } from './components/Contact'
 import { CTA } from './components/CTA'
 import { Footer } from './components/Footer'
@@ -24,6 +25,7 @@ function App() {
       </main>
       <Footer />
       <CookieConsent />
+      <Analytics />
     </>
   )
 }
