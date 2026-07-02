@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Camera, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -75,6 +75,8 @@ const ALL_CATEGORIES = 'Всички'
 export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalProps) {
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  // Respect system preference for reduced motion + treat software rendering as reduced motion
+  const prefersReduced = useReducedMotion()
 
   const categories = [ALL_CATEGORIES, ...Array.from(new Set(galleryItems.map((i) => i.category)))]
 
@@ -115,22 +117,24 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
   return (
     <AnimatePresence>
       {isOpen && (
+        // Overlay: solid colour instead of backdrop-blur (no GPU needed)
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.22 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-950/85 px-3 py-6 backdrop-blur-md sm:px-6"
+          transition={prefersReduced ? { duration: 0.1 } : { duration: 0.18 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-950/90 px-3 py-6 sm:px-6"
           onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="gallery-modal-title"
         >
+          {/* Panel: no scale transform (costly without GPU) */}
           <motion.div
-            initial={{ opacity: 0, y: 28, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 28, scale: 0.97 }}
-            transition={{ duration: 0.28, ease: 'easeOut' }}
+            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            animate={prefersReduced ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            transition={prefersReduced ? { duration: 0.12 } : { duration: 0.22, ease: 'easeOut' }}
             className="relative flex max-h-[92vh] w-full max-w-5xl flex-col rounded-3xl bg-slate-50 shadow-2xl overflow-hidden"
           >
             {/* ── Header ── */}
@@ -154,7 +158,7 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
               <button
                 onClick={onClose}
                 aria-label="Затвори галерията"
-                className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-slate-300 transition hover:bg-white/20 hover:text-white"
+                className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-slate-300 transition-colors hover:bg-white/20 hover:text-white"
               >
                 <X className="size-4" />
               </button>
@@ -166,7 +170,7 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+                  className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                     activeCategory === cat
                       ? 'bg-navy-950 text-white shadow-sm'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-950'
@@ -187,24 +191,19 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
 
             {/* ── Gallery Grid (scrollable) ── */}
             <div className="flex-1 overflow-y-auto p-5 sm:p-7">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeCategory}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2 }}
-                  className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-                >
-                  {filtered.map((item, idx) => (
-                    <GalleryCard
-                      key={item.id}
-                      item={item}
-                      onOpen={() => openLightbox(idx)}
-                    />
-                  ))}
-                </motion.div>
-              </AnimatePresence>
+              {/* Simple CSS opacity transition instead of AnimatePresence on the grid */}
+              <div
+                key={activeCategory}
+                className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {filtered.map((item, idx) => (
+                  <GalleryCard
+                    key={item.id}
+                    item={item}
+                    onOpen={() => openLightbox(idx)}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* ── Footer ── */}
@@ -215,7 +214,7 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button
                   onClick={onClose}
-                  className="w-1/2 sm:w-auto rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100"
+                  className="w-1/2 sm:w-auto rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100"
                 >
                   Затвори
                 </button>
@@ -226,7 +225,7 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
                       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
                     }, 200)
                   }}
-                  className="w-1/2 sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-2 text-xs font-bold text-white transition hover:bg-navy-800"
+                  className="w-1/2 sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-2 text-xs font-bold text-white transition-colors hover:bg-navy-800"
                 >
                   Заявете оглед
                   <ArrowRight className="size-3.5 text-primary-300" />
@@ -242,15 +241,16 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
-                className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 px-4 py-8"
+                transition={{ duration: 0.15 }}
+                className="fixed inset-0 z-[110] flex items-center justify-center bg-black/92 px-4 py-8"
                 onClick={closeLightbox}
               >
+                {/* No scale animation on lightbox panel — just fade */}
                 <motion.div
-                  initial={{ scale: 0.92, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.92, opacity: 0 }}
-                  transition={{ duration: 0.22 }}
+                  initial={{ opacity: 0, y: prefersReduced ? 0 : 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.18 }}
                   className="relative flex max-h-[90vh] max-w-4xl w-full flex-col overflow-hidden rounded-2xl bg-navy-950 shadow-2xl"
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -262,14 +262,14 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
                       className="h-full max-h-[65vh] w-full object-contain"
                     />
 
-                    {/* Prev / Next arrows */}
+                    {/* Prev / Next arrows — solid bg instead of backdrop-blur */}
                     <button
                       onClick={() =>
                         setLightboxIndex((p) =>
                           p !== null ? (p - 1 + filtered.length) % filtered.length : null
                         )
                       }
-                      className="absolute left-3 top-1/2 -translate-y-1/2 flex size-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-black/80"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 flex size-10 items-center justify-center rounded-full bg-black/70 text-white transition-colors hover:bg-black/90"
                       aria-label="Предишна снимка"
                     >
                       <ChevronLeft className="size-5" />
@@ -280,7 +280,7 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
                           p !== null ? (p + 1) % filtered.length : null
                         )
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 flex size-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-black/80"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 flex size-10 items-center justify-center rounded-full bg-black/70 text-white transition-colors hover:bg-black/90"
                       aria-label="Следваща снимка"
                     >
                       <ChevronRight className="size-5" />
@@ -289,14 +289,14 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
                     {/* Close lightbox */}
                     <button
                       onClick={closeLightbox}
-                      className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-xl bg-black/60 text-white backdrop-blur-sm transition hover:bg-black/80"
+                      className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-xl bg-black/70 text-white transition-colors hover:bg-black/90"
                       aria-label="Затвори"
                     >
                       <X className="size-4" />
                     </button>
 
-                    {/* Counter */}
-                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur-sm">
+                    {/* Counter — solid bg instead of backdrop-blur */}
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
                       {(lightboxIndex ?? 0) + 1} / {filtered.length}
                     </div>
                   </div>
@@ -340,39 +340,38 @@ export function ProjectsGalleryModal({ isOpen, onClose }: ProjectsGalleryModalPr
 }
 
 // ─── Gallery Card ─────────────────────────────────────────────────────────────
+// Pure CSS hover effects — no Framer Motion JS on each card (much lighter)
 
 function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: () => void }) {
   return (
-    <motion.button
+    <button
       type="button"
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.2 }}
       onClick={onOpen}
-      className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white text-left shadow-soft border border-slate-200/80 transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+      className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white text-left shadow-soft border border-slate-200/80 transition-shadow duration-200 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
     >
       {/* Image */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
         <img
           src={item.image}
           alt={item.title}
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           loading="lazy"
         />
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-navy-950/0 transition-all duration-300 group-hover:bg-navy-950/30 flex items-center justify-center">
-          <span className="flex size-11 scale-75 items-center justify-center rounded-full bg-white/90 text-navy-950 opacity-0 shadow-lg transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+        {/* Hover overlay — CSS only, no JS */}
+        <div className="absolute inset-0 bg-navy-950/0 transition-colors duration-200 group-hover:bg-navy-950/25 flex items-center justify-center">
+          <span className="flex size-11 items-center justify-center rounded-full bg-white/90 text-navy-950 opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
             <Camera className="size-5" />
           </span>
         </div>
-        {/* Category badge */}
-        <span className="absolute top-3 left-3 rounded-lg bg-navy-950/75 px-2.5 py-1 text-[11px] font-bold text-primary-300 backdrop-blur-sm">
+        {/* Category badge — solid bg, no backdrop-blur */}
+        <span className="absolute top-3 left-3 rounded-lg bg-navy-950/80 px-2.5 py-1 text-[11px] font-bold text-primary-300">
           {item.category}
         </span>
       </div>
 
       {/* Text */}
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-sm font-bold text-navy-950 leading-snug group-hover:text-primary-600 transition-colors">
+        <h3 className="text-sm font-bold text-navy-950 leading-snug transition-colors group-hover:text-primary-600">
           {item.title}
         </h3>
         <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2">
@@ -395,11 +394,11 @@ function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: () => void }
             )}
           </div>
         )}
-        <div className="mt-auto pt-3 flex items-center gap-1 text-xs font-semibold text-primary-600 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="mt-auto pt-3 flex items-center gap-1 text-xs font-semibold text-primary-600 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           <span>Виж в пълен размер</span>
           <ChevronRight className="size-3.5" />
         </div>
       </div>
-    </motion.button>
+    </button>
   )
 }
