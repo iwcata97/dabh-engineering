@@ -1,11 +1,15 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Menu, X } from 'lucide-react'
+import { ArrowRight, Camera, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { navLinks } from '../data/content'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
 
-export function Header() {
+interface HeaderProps {
+  onOpenGallery?: () => void
+}
+
+export function Header({ onOpenGallery }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('#home')
   const reducedMotion = useReducedMotion()
@@ -73,6 +77,16 @@ export function Header() {
                 </a>
               )
             })}
+            {onOpenGallery && (
+              <button
+                type="button"
+                onClick={onOpenGallery}
+                className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-primary-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+              >
+                <Camera className="size-4 text-primary-600" />
+                <span>Галерия</span>
+              </button>
+            )}
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
@@ -122,6 +136,21 @@ export function Header() {
                     </a>
                   )
                 })}
+                {onOpenGallery && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      closeMenu()
+                      onOpenGallery()
+                    }}
+                    className="flex items-center justify-between rounded-md px-4 py-3 text-base font-semibold text-slate-700 hover:bg-primary-50 hover:text-navy-950 transition text-left"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Camera className="size-4 text-primary-600" />
+                      <span>Галерия обекти</span>
+                    </span>
+                  </button>
+                )}
                 <Button href="#contact" className="mt-2 w-full" icon={ArrowRight} onClick={closeMenu}>
                   Заявете консултация
                 </Button>
