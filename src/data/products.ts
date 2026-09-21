@@ -27,7 +27,7 @@ export type ProductCategory = (typeof productCategories)[number]
 export const products: Product[] = [
   // ─── HD-TVI Камери 2 Мегапиксела (1080p) 4-in-1 ────────────────────────────
   {
-    id: 'cam-01',
+    id: 'hikvision-ds-2ce56d0t-it3fc',
     model: 'DS-2CE56D0T-IT3F(C)',
     brand: 'Hikvision',
     image: '/products/cam-01.jpg',
@@ -55,7 +55,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'cam-02',
+    id: 'hikvision-ds-2ce78d0t-it3fs',
     model: 'DS-2CE78D0T-IT3FS',
     brand: 'Hikvision',
     image: '/products/cam-02.jpg',
@@ -83,7 +83,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'cam-03',
+    id: 'hikvision-ds-2ce76d0t-itmf',
     model: 'DS-2CE76D0T-ITMF',
     brand: 'Hikvision',
     image: '/products/cam-03.jpg',
@@ -111,7 +111,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'cam-04',
+    id: 'hikvision-ds-2ce16d0t-itfc',
     model: 'DS-2CE16D0T-ITF(C)',
     brand: 'Hikvision',
     image: '/products/cam-04.jpg',
@@ -139,7 +139,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'cam-05',
+    id: 'hikvision-ds-2ce16d0t-itfs',
     model: 'DS-2CE16D0T-ITFS',
     brand: 'Hikvision',
     image: '/products/cam-05.jpg',
@@ -167,7 +167,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'cam-06',
+    id: 'hikvision-ds-2ce17d0t-it5fc',
     model: 'DS-2CE17D0T-IT5F(C)',
     brand: 'Hikvision',
     image: '/products/cam-06.jpg',
@@ -195,7 +195,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'cam-07',
+    id: 'hikvision-ds-2ce56d0t-it3zf',
     model: 'DS-2CE56D0T-IT3ZF',
     brand: 'Hikvision',
     image: '/products/cam-07.jpg',
@@ -225,7 +225,7 @@ export const products: Product[] = [
 
   // ─── Еднопостови комплекти (Видеодомофони) ──────────────────────────────────
   {
-    id: 'intercom-01',
+    id: 'hikvision-ds-kis613-s',
     model: 'DS-KIS613-S',
     brand: 'Hikvision',
     image: '/products/intercom-01.jpg',
@@ -253,7 +253,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'intercom-02',
+    id: 'hikvision-ds-kis610-p',
     model: 'DS-KIS610-P',
     brand: 'Hikvision',
     image: '/products/intercom-02.jpg',
@@ -281,7 +281,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'intercom-03',
+    id: 'hikvision-ds-kis602b',
     model: 'DS-KIS602(B)',
     brand: 'Hikvision',
     image: '/products/intercom-03.jpg',
@@ -309,7 +309,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'intercom-04',
+    id: 'hikvision-ds-kis603-pc',
     model: 'DS-KIS603-P(C)',
     brand: 'Hikvision',
     image: '/products/intercom-04.jpg',
@@ -337,7 +337,7 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'intercom-05',
+    id: 'hikvision-ds-kis604-sc',
     model: 'DS-KIS604-S(C)',
     brand: 'Hikvision',
     image: '/products/intercom-05.jpg',

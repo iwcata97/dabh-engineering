@@ -18,16 +18,42 @@ import { products, type Product } from '../data/products'
 interface ProductsCatalogModalProps {
   isOpen: boolean
   onClose: () => void
+  initialProductId?: string
 }
 
 const ALL_CATEGORIES = 'Всички'
 
-export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalProps) {
+export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: ProductsCatalogModalProps) {
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES)
   const [detailProduct, setDetailProduct] = useState<Product | null>(null)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({})
   const prefersReduced = useReducedMotion()
+
+  // Initialize product if passed via props
+  useEffect(() => {
+    if (isOpen && initialProductId && !detailProduct) {
+      const product = products.find(p => p.id === initialProductId)
+      if (product) {
+        setDetailProduct(product)
+        setActiveCategory(product.category)
+      }
+    }
+  }, [isOpen, initialProductId, detailProduct])
+
+  // Sync detailed product state to URL
+  useEffect(() => {
+    if (!isOpen) return
+    const url = new URL(window.location.href)
+    if (detailProduct) {
+      url.searchParams.set('product', detailProduct.id)
+    } else {
+      url.searchParams.delete('product')
+    }
+    if (url.toString() !== window.location.href) {
+      window.history.replaceState({}, '', url)
+    }
+  }, [detailProduct, isOpen])
 
   const categories = [
     ALL_CATEGORIES,

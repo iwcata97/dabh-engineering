@@ -11,7 +11,11 @@ const nodePositions = [
   'bottom-[18%] right-[12%]',
 ]
 
-export function Hero() {
+interface HeroProps {
+  onOpenCatalog?: () => void
+}
+
+export function Hero({ onOpenCatalog }: HeroProps) {
   const reducedMotion = useReducedMotion()
 
   return (
@@ -40,12 +44,20 @@ export function Hero() {
               сградна автоматизация и структурни кабелни системи за домове и бизнес обекти.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row flex-wrap">
               <Button href="#contact" size="lg" icon={ArrowRight}>
                 Заявете консултация
               </Button>
               <Button href="#services" size="lg" variant="dark">
                 Вижте услугите
+              </Button>
+              <Button 
+                onClick={onOpenCatalog} 
+                size="lg" 
+                variant="ghost" 
+                className="bg-white text-navy-950 font-bold hover:bg-slate-100 transition-colors"
+              >
+                Разгледайте каталога
               </Button>
             </div>
           </motion.div>
