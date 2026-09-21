@@ -361,13 +361,13 @@ function ProductCard({
           </span>
         </div>
         {/* Category badge */}
-        <span className="absolute top-3 left-3 rounded-lg bg-navy-950/80 px-2.5 py-1 text-[11px] font-bold text-primary-300">
+        <span className="absolute top-3 left-3 max-w-[calc(100%-24px)] truncate rounded-lg bg-navy-950/80 px-2.5 py-1 text-[11px] font-bold text-primary-300">
           {product.category}
         </span>
         {/* Price badge */}
-        <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-lg bg-amber-500/90 px-2.5 py-1 text-[11px] font-bold text-navy-950">
-          <Clock className="size-3" />
-          {product.price}
+        <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-lg bg-amber-500/90 px-2.5 py-1 text-[11px] font-bold text-navy-950">
+          <Clock className="size-3 shrink-0" />
+          <span className="truncate">{product.price}</span>
         </span>
       </div>
 
