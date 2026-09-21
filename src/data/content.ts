@@ -58,6 +58,7 @@ export const navLinks: NavigationItem[] = [
   { label: 'Начало', href: '#home' },
   { label: 'Услуги', href: '#services' },
   { label: 'Процес', href: '#process' },
+  { label: 'Артикули', href: '#products' },
   { label: 'За нас', href: '#about' },
   { label: 'Контакт', href: '#contact' },
 ]

@@ -11,32 +11,45 @@ import { Values } from './components/Values'
 import { CookieConsent } from './components/CookieConsent'
 import { ProjectsGalleryModal } from './components/ProjectsGalleryModal'
 import { ProjectsTeaser } from './components/ProjectsTeaser'
+import { ProductsTeaser } from './components/ProductsTeaser'
+import { ProductsCatalogModal } from './components/ProductsCatalogModal'
 
 function App() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false)
 
   return (
     <>
-      <Header onOpenGallery={() => setIsGalleryOpen(true)} />
+      <Header
+        onOpenGallery={() => setIsGalleryOpen(true)}
+        onOpenCatalog={() => setIsCatalogOpen(true)}
+      />
       <main>
         <Hero />
         <Services />
         <Process />
         <ProjectsTeaser onOpenGallery={() => setIsGalleryOpen(true)} />
+        <ProductsTeaser onOpenCatalog={() => setIsCatalogOpen(true)} />
         <Values />
         <Sectors />
         <CTA />
         <Contact />
       </main>
-      <Footer onOpenGallery={() => setIsGalleryOpen(true)} />
+      <Footer
+        onOpenGallery={() => setIsGalleryOpen(true)}
+        onOpenCatalog={() => setIsCatalogOpen(true)}
+      />
       <CookieConsent />
       <ProjectsGalleryModal
         isOpen={isGalleryOpen}
         onClose={() => setIsGalleryOpen(false)}
+      />
+      <ProductsCatalogModal
+        isOpen={isCatalogOpen}
+        onClose={() => setIsCatalogOpen(false)}
       />
     </>
   )
 }
 
 export default App
-

@@ -1,4 +1,4 @@
-import { Camera, ShieldCheck } from 'lucide-react'
+import { Camera, Package, ShieldCheck } from 'lucide-react'
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -23,9 +23,10 @@ import { PrivacyPolicy } from './PrivacyPolicy'
 
 interface FooterProps {
   onOpenGallery?: () => void
+  onOpenCatalog?: () => void
 }
 
-export function Footer({ onOpenGallery }: FooterProps) {
+export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
   const year = new Date().getFullYear()
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
 
@@ -98,6 +99,17 @@ export function Footer({ onOpenGallery }: FooterProps) {
                       >
                         <Camera className="size-3.5 shrink-0" />
                         Галерия обекти
+                      </button>
+                    </li>
+                  )}
+                  {onOpenCatalog && (
+                    <li>
+                      <button
+                        onClick={onOpenCatalog}
+                        className="flex items-center gap-1.5 text-amber-300 transition hover:text-amber-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 rounded font-medium"
+                      >
+                        <Package className="size-3.5 shrink-0" />
+                        Каталог продукти
                       </button>
                     </li>
                   )}
