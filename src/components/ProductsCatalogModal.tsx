@@ -4,11 +4,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  Filter,
   Package,
   Tag,
   X,
+  Check,
 } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { products, type Product } from '../data/products'
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -23,6 +25,8 @@ const ALL_CATEGORIES = 'Всички'
 export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalProps) {
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES)
   const [detailProduct, setDetailProduct] = useState<Product | null>(null)
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({})
   const prefersReduced = useReducedMotion()
 
   const categories = [
@@ -30,10 +34,71 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
     ...Array.from(new Set(products.map((p) => p.category))),
   ]
 
-  const filtered =
-    activeCategory === ALL_CATEGORIES
-      ? products
-      : products.filter((p) => p.category === activeCategory)
+  // Clear filters when category changes
+  useEffect(() => {
+    setSelectedFilters({})
+  }, [activeCategory])
+
+  // Collect available filter options based on the active category
+  const availableFilters = useMemo(() => {
+    const filtersObj: Record<string, Set<string>> = {}
+
+    const baseProducts =
+      activeCategory === ALL_CATEGORIES
+        ? products
+        : products.filter((p) => p.category === activeCategory)
+
+    baseProducts.forEach((p) => {
+      if (p.filters) {
+        Object.entries(p.filters).forEach(([key, value]) => {
+          if (!filtersObj[key]) filtersObj[key] = new Set()
+          filtersObj[key].add(value)
+        })
+      }
+    })
+
+    const result: Record<string, string[]> = {}
+    Object.keys(filtersObj).forEach((key) => {
+      // Sort specific keys if needed, else alphabetical
+      result[key] = Array.from(filtersObj[key]).sort()
+    })
+    return result
+  }, [activeCategory])
+
+  // Filter products by category and selected sub-filters
+  const filtered = useMemo(() => {
+    let result =
+      activeCategory === ALL_CATEGORIES
+        ? products
+        : products.filter((p) => p.category === activeCategory)
+
+    Object.entries(selectedFilters).forEach(([filterKey, selectedValues]) => {
+      if (selectedValues.length > 0) {
+        result = result.filter(
+          (p) => p.filters && selectedValues.includes(p.filters[filterKey])
+        )
+      }
+    })
+
+    return result
+  }, [activeCategory, selectedFilters])
+
+  const activeFiltersCount = Object.values(selectedFilters).reduce(
+    (acc, val) => acc + val.length,
+    0
+  )
+
+  const toggleFilter = (key: string, value: string) => {
+    setSelectedFilters((prev) => {
+      const current = prev[key] || []
+      if (current.includes(value)) {
+        return { ...prev, [key]: current.filter((v) => v !== value) }
+      }
+      return { ...prev, [key]: [...current, value] }
+    })
+  }
+
+  const clearAllFilters = () => setSelectedFilters({})
 
   // Lock body scroll
   useEffect(() => {
@@ -48,12 +113,13 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (detailProduct) setDetailProduct(null)
+        else if (showMobileFilters) setShowMobileFilters(false)
         else onClose()
       }
     }
     if (isOpen) window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [isOpen, onClose, detailProduct])
+  }, [isOpen, onClose, detailProduct, showMobileFilters])
 
   const openDetail = useCallback((product: Product) => setDetailProduct(product), [])
   const closeDetail = useCallback(() => setDetailProduct(null), [])
@@ -84,6 +150,65 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
     return () => window.removeEventListener('keydown', handler)
   }, [isOpen, detailProduct, navigateDetail])
 
+  // Reusable Filter Content
+  const renderFilterPanel = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-bold text-navy-950">Филтри</h3>
+        {activeFiltersCount > 0 && (
+          <button
+            onClick={clearAllFilters}
+            className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+          >
+            Изчисти
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-5">
+        {Object.entries(availableFilters).map(([key, values]) => {
+          if (values.length <= 1) return null // Hide filter if only one or zero options available
+
+          return (
+            <div key={key}>
+              <h4 className="mb-2.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {key}
+              </h4>
+              <div className="space-y-2">
+                {values.map((value) => {
+                  const isSelected = (selectedFilters[key] || []).includes(value)
+                  return (
+                    <label
+                      key={value}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        toggleFilter(key, value)
+                      }}
+                      className="flex cursor-pointer items-center gap-2.5 group"
+                    >
+                      <div
+                        className={`flex size-4 shrink-0 items-center justify-center rounded-[4px] border transition-colors ${
+                          isSelected
+                            ? 'bg-primary-500 border-primary-500 text-white'
+                            : 'bg-white border-slate-300 group-hover:border-primary-400 text-transparent'
+                        }`}
+                      >
+                        <Check className="size-3" strokeWidth={3} />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700 group-hover:text-navy-950 transition-colors leading-tight">
+                        {value}
+                      </span>
+                    </label>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -109,7 +234,7 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
                 ? { duration: 0.12 }
                 : { duration: 0.22, ease: 'easeOut' }
             }
-            className="relative flex max-h-[92vh] w-full max-w-5xl flex-col rounded-3xl bg-slate-50 shadow-2xl overflow-hidden"
+            className="relative flex h-full max-h-[92vh] w-full max-w-6xl flex-col rounded-3xl bg-slate-50 shadow-2xl overflow-hidden"
           >
             {/* ── Header ── */}
             <div className="flex shrink-0 items-center justify-between gap-4 bg-navy-950 px-6 py-5 sm:px-8">
@@ -138,44 +263,79 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
               </button>
             </div>
 
-            {/* ── Category Filter ── */}
-            <div className="shrink-0 bg-white border-b border-slate-200 px-6 py-3 sm:px-8 flex items-center gap-2 overflow-x-auto">
-              {categories.map((cat) => (
+            {/* ── Category Filter & Mobile Actions ── */}
+            <div className="shrink-0 bg-white border-b border-slate-200 px-6 py-3 sm:px-8 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2 overflow-x-auto min-w-0 pb-1 scrollbar-hide">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                      activeCategory === cat
+                        ? 'bg-navy-950 text-white shadow-sm'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-950'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+              
+              <div className="flex items-center gap-3 shrink-0">
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-                    activeCategory === cat
-                      ? 'bg-navy-950 text-white shadow-sm'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-950'
-                  }`}
+                  onClick={() => setShowMobileFilters(true)}
+                  className="lg:hidden flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
                 >
-                  {cat}
-                  {cat !== ALL_CATEGORIES && (
-                    <span className="ml-1.5 text-[10px] opacity-60">
-                      ({products.filter((p) => p.category === cat).length})
+                  <Filter className="size-3.5" />
+                  Филтри
+                  {activeFiltersCount > 0 && (
+                    <span className="flex size-4 items-center justify-center rounded-full bg-primary-500 text-[9px] text-white">
+                      {activeFiltersCount}
                     </span>
                   )}
                 </button>
-              ))}
-              <span className="ml-auto shrink-0 text-xs text-slate-400">
-                {filtered.length} артикул{filtered.length === 1 ? '' : 'а'}
-              </span>
+                <span className="hidden sm:block text-xs font-medium text-slate-500">
+                  Намерени: <strong className="text-navy-950">{filtered.length}</strong>
+                </span>
+              </div>
             </div>
 
-            {/* ── Products Grid (scrollable) ── */}
-            <div className="flex-1 overflow-y-auto p-5 sm:p-7">
-              <div
-                key={activeCategory}
-                className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-              >
-                {filtered.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onOpen={() => openDetail(product)}
-                  />
-                ))}
+            {/* ── Main Content Area ── */}
+            <div className="flex flex-1 min-h-0 bg-slate-50/50">
+              {/* ── Desktop Filters Sidebar ── */}
+              <div className="hidden lg:block w-64 shrink-0 border-r border-slate-200 bg-white p-6 overflow-y-auto">
+                {renderFilterPanel()}
+              </div>
+
+              {/* ── Products Grid ── */}
+              <div className="flex-1 overflow-y-auto p-5 sm:p-7">
+                {filtered.length > 0 ? (
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {filtered.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        onOpen={() => openDetail(product)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-12">
+                    <div className="flex size-16 items-center justify-center rounded-full bg-slate-100 mb-4">
+                      <Filter className="size-8 text-slate-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-navy-950">Няма намерени продукти</h3>
+                    <p className="text-sm text-slate-500 mt-1 max-w-sm">
+                      Опитайте да промените филтрите или да изберете друга категория.
+                    </p>
+                    <button
+                      onClick={clearAllFilters}
+                      className="mt-6 rounded-xl bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-300"
+                    >
+                      Изчисти филтрите
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -209,6 +369,50 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
             </div>
           </motion.div>
 
+          {/* ── Mobile Filters Slide-over ── */}
+          <AnimatePresence>
+            {showMobileFilters && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="fixed inset-0 z-[120] flex justify-end bg-navy-950/40 lg:hidden"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                <motion.div
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  className="w-full max-w-xs h-full bg-white shadow-2xl flex flex-col"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+                    <h3 className="font-bold text-navy-950">Филтри</h3>
+                    <button
+                      onClick={() => setShowMobileFilters(false)}
+                      className="p-1 rounded-md text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+                    >
+                      <X className="size-5" />
+                    </button>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-5">
+                    {renderFilterPanel()}
+                  </div>
+                  <div className="p-4 border-t border-slate-200 bg-slate-50">
+                    <button
+                      onClick={() => setShowMobileFilters(false)}
+                      className="w-full rounded-xl bg-primary-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-700"
+                    >
+                      Покажи {filtered.length} резултата
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* ── Product Detail View ── */}
           <AnimatePresence>
             {detailProduct && (
@@ -217,7 +421,7 @@ export function ProductsCatalogModal({ isOpen, onClose }: ProductsCatalogModalPr
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="fixed inset-0 z-[110] flex items-center justify-center bg-black/92 px-4 py-8"
+                className="fixed inset-0 z-[130] flex items-center justify-center bg-black/92 px-4 py-8"
                 onClick={closeDetail}
               >
                 <motion.div
