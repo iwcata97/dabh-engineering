@@ -9,14 +9,14 @@ export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
     <section className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/60">
       <div className="container-shell relative z-10">
         <div className="overflow-hidden rounded-3xl bg-navy-950 p-8 sm:p-12 lg:p-16 text-white shadow-2xl border border-white/10 relative">
-          {/* Background decorative glows */}
-          <div className="pointer-events-none absolute -top-24 -right-24 size-96 rounded-full bg-primary-500/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-24 size-96 rounded-full bg-cyan-500/15 blur-3xl" />
+          {/* Background decorative glows (Optimized with radial gradients instead of heavy blur) */}
+          <div className="pointer-events-none absolute -top-24 -left-24 size-96 rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-500/15 to-transparent" />
+          <div className="pointer-events-none absolute -bottom-24 -right-24 size-96 rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-400/10 to-transparent" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
             {/* Left text column */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-primary-300 backdrop-blur-md border border-white/15">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-cyan-300 border border-white/15">
                 <Sparkles className="size-3.5 text-primary-400 animate-pulse" />
                 <span>Реално изпълнени обекти</span>
               </div>
@@ -84,7 +84,7 @@ export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
                       <p className="text-xs font-bold text-white">Видеонаблюдение &ndash; Складова база</p>
                       <p className="text-[11px] text-slate-300">Щракнете, за да видите всички обекти</p>
                     </div>
-                    <span className="flex size-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white transition group-hover:bg-primary-500 group-hover:text-navy-950">
+                    <span className="flex size-9 items-center justify-center rounded-full bg-white/20 text-white transition group-hover:bg-primary-500 group-hover:text-navy-950">
                       <Camera className="size-4" />
                     </span>
                   </div>
