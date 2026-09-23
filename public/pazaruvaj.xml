@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<products>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce56d0t-it3fc]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Куполна камера 2MP – EXIR 40м]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce56d0t-it3fc]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-01.jpg]]></image_url>
+    <description><![CDATA[HD-TVI куполна камера (4 in 1), 2 мегапиксела, фиксиран обектив 2.8 мм, EXIR до 40 м, IP66.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce78d0t-it3fs]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Куполна камера 2MP – Вграден микрофон, CoAx Audio]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce78d0t-it3fs]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-02.jpg]]></image_url>
+    <description><![CDATA[HD-TVI куполна камера (4 in 1), 2 мегапиксела, вграден микрофон, обектив 3.6 мм, EXIR до 40 м.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce76d0t-itmf]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Куполна камера 2MP – EXIR 30м, черен корпус]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce76d0t-itmf]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-03.jpg]]></image_url>
+    <description><![CDATA[HD-TVI куполна камера (4 in 1), 2 мегапиксела, обектив 2.8 мм, EXIR до 30 м, черен корпус.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce16d0t-itfc]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Булет камера 2MP – EXIR 30м, метален корпус]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce16d0t-itfc]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-04.jpg]]></image_url>
+    <description><![CDATA[HD-TVI булет камера (4 in 1), 2 мегапиксела, обектив 2.8 мм, EXIR до 30 м, метален корпус.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce16d0t-itfs]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Булет камера 2MP – Вграден микрофон, CoAx Audio]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce16d0t-itfs]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-05.jpg]]></image_url>
+    <description><![CDATA[HD-TVI булет камера (4 in 1), 2 мегапиксела, вграден микрофон, обектив 3.6 мм, Smart IR 30м.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce17d0t-it5fc]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Булет камера 2MP – EXIR 80м]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce17d0t-it5fc]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-06.jpg]]></image_url>
+    <description><![CDATA[HD-TVI булет камера (4 in 1), 2 мегапиксела, обектив 3.6 мм, EXIR до 80 м, механичен IR филтър.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-2ce56d0t-it3zf]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Куполна камера 2MP – Моторизиран обектив 2.7–13.5мм]]></name>
+    <category><![CDATA[HD-TVI Камери 2MP (1080p)]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-2ce56d0t-it3zf]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/cam-07.jpg]]></image_url>
+    <description><![CDATA[HD-TVI куполна камера (4 in 1), 2 мегапиксела, моторизиран варифокален обектив, EXIR до 70 м.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-kis613-s]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[IP видео-домофонен комплект – 4MP, 7" монитор, Wi-Fi 6]]></name>
+    <category><![CDATA[Еднопостови комплекти]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-kis613-s]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/intercom-01.jpg]]></image_url>
+    <description><![CDATA[IP видео-домофонен комплект с 4MP камера, 7" монитор, PoE, Wi-Fi 6, Bluetooth и 32GB карта.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-kis610-p]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[IP видео-домофонен комплект – 4MP ултра-широк ъгъл]]></name>
+    <category><![CDATA[Еднопостови комплекти]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-kis610-p]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/intercom-02.jpg]]></image_url>
+    <description><![CDATA[IP видео-домофонен комплект с 4MP ултра-широк ъгъл, Wi-Fi монитор, PoE захранване.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-kis602b]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Видео-домофонен комплект – 180° Fish Eye камера]]></name>
+    <category><![CDATA[Еднопостови комплекти]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-kis602b]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/intercom-03.jpg]]></image_url>
+    <description><![CDATA[Комплект с DS-KD8003-IME1(B) 180° fish eye камера, 7" цветен дисплей, PoE.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-kis603-pc]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Видео-домофонен комплект – FullHD WDR, Mifare четец]]></name>
+    <category><![CDATA[Еднопостови комплекти]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-kis603-pc]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/intercom-04.jpg]]></image_url>
+    <description><![CDATA[Комплект с FullHD WDR камера, Mifare 13.56MHz четец, 7" дисплей, Standard PoE.]]></description>
+  </product>
+  <product>
+    <identifier><![CDATA[hikvision-ds-kis604-sc]]></identifier>
+    <manufacturer><![CDATA[Hikvision]]></manufacturer>
+    <name><![CDATA[Видео-домофонен комплект – 129° 2MP камера, WiFi дисплей]]></name>
+    <category><![CDATA[Еднопостови комплекти]]></category>
+    <price>0</price>
+    <product_url><![CDATA[https://tvoy-domein.com/catalog?product=hikvision-ds-kis604-sc]]></product_url>
+    <image_url><![CDATA[https://tvoy-domein.com/products/intercom-05.jpg]]></image_url>
+    <description><![CDATA[Комплект с 129° 2MP камера, варифокален обектив, 7" WiFi дисплей, PoE switch и 16GB карта.]]></description>
+  </product>
+</products>
