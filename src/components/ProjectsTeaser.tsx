@@ -6,7 +6,7 @@ interface ProjectsTeaserProps {
 
 export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
   return (
-    <section className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/60">
+    <section className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/60 dark:from-graphite-900 dark:via-navy-950 dark:to-graphite-900 dark:border-white/5">
       <div className="container-shell relative z-10">
         <div className="overflow-hidden rounded-3xl bg-navy-950 p-8 sm:p-12 lg:p-16 text-white shadow-2xl border border-white/10 relative">
           {/* Background decorative glows (Optimized with radial gradients instead of heavy blur) */}

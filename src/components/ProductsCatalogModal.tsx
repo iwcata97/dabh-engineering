@@ -180,11 +180,11 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
   const renderFilterPanel = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-navy-950">Филтри</h3>
+        <h3 className="text-sm font-bold text-navy-950 dark:text-white">Филтри</h3>
         {activeFiltersCount > 0 && (
           <button
             onClick={clearAllFilters}
-            className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+            className="text-xs font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
           >
             Изчисти
           </button>
@@ -197,7 +197,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
 
           return (
             <div key={key}>
-              <h4 className="mb-2.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <h4 className="mb-2.5 text-xs font-bold text-slate-500 uppercase tracking-wider dark:text-slate-400">
                 {key}
               </h4>
               <div className="space-y-2">
@@ -216,12 +216,12 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                         className={`flex size-4 shrink-0 items-center justify-center rounded-[4px] border transition-colors ${
                           isSelected
                             ? 'bg-primary-500 border-primary-500 text-white'
-                            : 'bg-white border-slate-300 group-hover:border-primary-400 text-transparent'
+                            : 'bg-white border-slate-300 group-hover:border-primary-400 text-transparent dark:bg-white/10 dark:border-white/20 dark:group-hover:border-primary-400'
                         }`}
                       >
                         <Check className="size-3" strokeWidth={3} />
                       </div>
-                      <span className="text-sm font-medium text-slate-700 group-hover:text-navy-950 transition-colors leading-tight">
+                      <span className="text-sm font-medium text-slate-700 group-hover:text-navy-950 dark:text-slate-300 dark:group-hover:text-white transition-colors leading-tight">
                         {value}
                       </span>
                     </label>
@@ -260,10 +260,10 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                 ? { duration: 0.12 }
                 : { duration: 0.22, ease: 'easeOut' }
             }
-            className="relative flex h-full max-h-[92vh] w-full max-w-6xl flex-col rounded-3xl bg-slate-50 shadow-2xl overflow-hidden"
+            className="relative flex h-full max-h-[92vh] w-full max-w-6xl flex-col rounded-3xl bg-slate-50 shadow-2xl overflow-hidden dark:bg-navy-950 dark:border dark:border-white/10 dark:shadow-glow"
           >
             {/* ── Header ── */}
-            <div className="flex shrink-0 items-center justify-between gap-4 bg-navy-950 px-6 py-5 sm:px-8">
+            <div className="flex shrink-0 items-center justify-between gap-4 bg-navy-950 px-6 py-5 sm:px-8 dark:border-b dark:border-white/10">
               <div className="flex items-center gap-3 min-w-0">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-primary-400">
                   <Package className="size-5 text-navy-950" />
@@ -290,7 +290,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
             </div>
 
             {/* ── Category Filter & Mobile Actions ── */}
-            <div className="shrink-0 bg-white border-b border-slate-200 px-6 py-3 sm:px-8 flex items-center justify-between gap-4">
+            <div className="shrink-0 bg-white border-b border-slate-200 px-6 py-3 sm:px-8 flex items-center justify-between gap-4 dark:bg-graphite-900 dark:border-white/10">
               <div className="flex items-center gap-2 overflow-x-auto min-w-0 pb-1 scrollbar-hide">
                 {categories.map((cat) => (
                   <button
@@ -298,8 +298,8 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                     onClick={() => setActiveCategory(cat)}
                     className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                       activeCategory === cat
-                        ? 'bg-navy-950 text-white shadow-sm'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-950'
+                        ? 'bg-navy-950 text-white shadow-sm dark:bg-primary-500 dark:text-navy-950'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-950 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:bg-white/[0.12] dark:hover:text-white'
                     }`}
                   >
                     {cat}
@@ -310,7 +310,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
               <div className="flex items-center gap-3 shrink-0">
                 <button
                   onClick={() => setShowMobileFilters(true)}
-                  className="lg:hidden flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+                  className="lg:hidden flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:border-white/15 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15"
                 >
                   <Filter className="size-3.5" />
                   Филтри
@@ -320,16 +320,16 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                     </span>
                   )}
                 </button>
-                <span className="hidden sm:block text-xs font-medium text-slate-500">
-                  Намерени: <strong className="text-navy-950">{filtered.length}</strong>
+                <span className="hidden sm:block text-xs font-medium text-slate-500 dark:text-slate-400">
+                  Намерени: <strong className="text-navy-950 dark:text-white">{filtered.length}</strong>
                 </span>
               </div>
             </div>
 
             {/* ── Main Content Area ── */}
-            <div className="flex flex-1 min-h-0 bg-slate-50/50">
+            <div className="flex flex-1 min-h-0 bg-slate-50/50 dark:bg-navy-950/60">
               {/* ── Desktop Filters Sidebar ── */}
-              <div className="hidden lg:block w-64 shrink-0 border-r border-slate-200 bg-white p-6 overflow-y-auto">
+              <div className="hidden lg:block w-64 shrink-0 border-r border-slate-200 bg-white p-6 overflow-y-auto dark:border-white/10 dark:bg-graphite-900">
                 {renderFilterPanel()}
               </div>
 
@@ -347,16 +347,16 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-slate-100 mb-4">
-                      <Filter className="size-8 text-slate-300" />
+                    <div className="flex size-16 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 mb-4">
+                      <Filter className="size-8 text-slate-300 dark:text-slate-600" />
                     </div>
-                    <h3 className="text-lg font-bold text-navy-950">Няма намерени продукти</h3>
-                    <p className="text-sm text-slate-500 mt-1 max-w-sm">
+                    <h3 className="text-lg font-bold text-navy-950 dark:text-white">Няма намерени продукти</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
                       Опитайте да промените филтрите или да изберете друга категория.
                     </p>
                     <button
                       onClick={clearAllFilters}
-                      className="mt-6 rounded-xl bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-300"
+                      className="mt-6 rounded-xl bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-300 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20"
                     >
                       Изчисти филтрите
                     </button>
@@ -366,14 +366,14 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
             </div>
 
             {/* ── Footer ── */}
-            <div className="shrink-0 bg-white border-t border-slate-200 px-6 py-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-slate-500 text-center sm:text-left">
+            <div className="shrink-0 bg-white border-t border-slate-200 px-6 py-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 dark:bg-graphite-900 dark:border-white/10">
+              <p className="text-xs text-slate-500 text-center sm:text-left dark:text-slate-400">
                 Имате въпроси за някой продукт? Свържете се с нас за повече информация.
               </p>
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button
                   onClick={onClose}
-                  className="w-1/2 sm:w-auto rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100"
+                  className="w-1/2 sm:w-auto rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-white/15 dark:text-slate-200 dark:hover:bg-white/10"
                 >
                   Затвори
                 </button>
@@ -386,10 +386,10 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                         ?.scrollIntoView({ behavior: 'smooth' })
                     }, 200)
                   }}
-                  className="w-1/2 sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-2 text-xs font-bold text-white transition-colors hover:bg-navy-800"
+                  className="w-1/2 sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-2 text-xs font-bold text-white transition-colors hover:bg-navy-800 dark:bg-primary-500 dark:text-navy-950 dark:hover:bg-primary-400"
                 >
                   Запитване
-                  <ArrowRight className="size-3.5 text-primary-300" />
+                  <ArrowRight className="size-3.5 text-primary-300 dark:text-navy-950" />
                 </button>
               </div>
             </div>
@@ -403,7 +403,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="fixed inset-0 z-[120] flex justify-end bg-navy-950/40 lg:hidden"
+                className="fixed inset-0 z-[120] flex justify-end bg-navy-950/40 dark:bg-black/60 lg:hidden"
                 onClick={() => setShowMobileFilters(false)}
               >
                 <motion.div
@@ -411,14 +411,14 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   animate={{ x: 0 }}
                   exit={{ x: '100%' }}
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                  className="w-full max-w-xs h-full bg-white shadow-2xl flex flex-col"
+                  className="w-full max-w-xs h-full bg-white dark:bg-graphite-900 shadow-2xl flex flex-col"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
-                    <h3 className="font-bold text-navy-950">Филтри</h3>
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-navy-950">
+                    <h3 className="font-bold text-navy-950 dark:text-white">Филтри</h3>
                     <button
                       onClick={() => setShowMobileFilters(false)}
-                      className="p-1 rounded-md text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+                      className="p-1 rounded-md text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-white"
                     >
                       <X className="size-5" />
                     </button>
@@ -426,10 +426,10 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   <div className="flex-1 overflow-y-auto p-5">
                     {renderFilterPanel()}
                   </div>
-                  <div className="p-4 border-t border-slate-200 bg-slate-50">
+                  <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-navy-950">
                     <button
                       onClick={() => setShowMobileFilters(false)}
-                      className="w-full rounded-xl bg-primary-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-700"
+                      className="w-full rounded-xl bg-primary-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-700 dark:bg-primary-500 dark:text-navy-950 dark:hover:bg-primary-400"
                     >
                       Покажи {filtered.length} резултата
                     </button>
@@ -574,7 +574,7 @@ function ProductCard({
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white text-left shadow-soft border border-slate-200/80 transition-shadow duration-200 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+      className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white text-left shadow-soft border border-slate-200/80 transition-shadow duration-200 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:bg-graphite-900 dark:border-white/10 dark:hover:border-primary-400/50 dark:hover:shadow-glow"
     >
       {/* Image */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
@@ -582,16 +582,17 @@ function ProductCard({
           src={product.image}
           alt={product.title}
           className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          loading="lazy"
+          loading="eager"
+          decoding="async"
         />
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-navy-950/0 transition-colors duration-200 group-hover:bg-navy-950/25 flex items-center justify-center">
-          <span className="flex size-11 items-center justify-center rounded-full bg-white/90 text-navy-950 opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+          <span className="flex size-11 items-center justify-center rounded-full bg-white/90 text-navy-950 opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 dark:bg-navy-950/90 dark:text-primary-300">
             <Package className="size-5" />
           </span>
         </div>
         {/* Category badge */}
-        <span className="absolute top-3 left-3 max-w-[calc(100%-24px)] truncate rounded-lg bg-navy-950/80 px-2.5 py-1 text-[11px] font-bold text-primary-300">
+        <span className="absolute top-3 left-3 max-w-[calc(100%-24px)] truncate rounded-lg bg-navy-950/80 px-2.5 py-1 text-[11px] font-bold text-primary-300 backdrop-blur-sm border border-white/10">
           {product.category}
         </span>
         {/* Price badge */}
@@ -604,16 +605,16 @@ function ProductCard({
       {/* Text */}
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2 mb-1.5">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase">
+          <span className="text-[10px] font-semibold text-slate-400 uppercase dark:text-slate-400">
             {product.brand}
           </span>
-          <span className="text-[10px] text-slate-300">•</span>
-          <span className="text-[10px] font-mono text-slate-400">{product.model}</span>
+          <span className="text-[10px] text-slate-300 dark:text-slate-600">•</span>
+          <span className="text-[10px] font-mono text-slate-400 dark:text-slate-400">{product.model}</span>
         </div>
-        <h3 className="text-sm font-bold text-navy-950 leading-snug transition-colors group-hover:text-primary-600">
+        <h3 className="text-sm font-bold text-navy-950 leading-snug transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-300">
           {product.title}
         </h3>
-        <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2">
+        <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2 dark:text-slate-400">
           {product.shortDescription}
         </p>
         {product.tags && product.tags.length > 0 && (
@@ -621,20 +622,20 @@ function ProductCard({
             {product.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500"
+                className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-white/[0.06] dark:text-slate-300"
               >
                 <Tag className="size-2.5" />
                 {tag}
               </span>
             ))}
             {product.tags.length > 2 && (
-              <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-400">
+              <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-400 dark:bg-white/[0.06] dark:text-slate-400">
                 +{product.tags.length - 2}
               </span>
             )}
           </div>
         )}
-        <div className="mt-auto pt-3 flex items-center gap-1 text-xs font-semibold text-primary-600 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+        <div className="mt-auto pt-3 flex items-center gap-1 text-xs font-semibold text-primary-600 opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:text-primary-300">
           <span>Виж детайли</span>
           <ChevronRight className="size-3.5" />
         </div>

@@ -6,7 +6,7 @@ export function CTA() {
   const reducedMotion = useReducedMotion()
 
   return (
-    <section className="bg-white px-4 py-6 sm:px-6 lg:px-8">
+    <section className="bg-white px-4 py-6 dark:bg-graphite-900 sm:px-6 lg:px-8">
       <motion.div
         className="mx-auto max-w-7xl overflow-hidden rounded-lg bg-navy-950 p-6 text-white shadow-glow sm:p-8 lg:p-10"
         initial={reducedMotion ? false : { opacity: 0, y: 18 }}

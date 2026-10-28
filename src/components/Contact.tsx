@@ -38,9 +38,9 @@ type ContactFormValues = {
 }
 
 const fieldClass =
-  'min-h-12 w-full rounded-md border border-slate-200 bg-white px-4 py-3 text-base text-navy-950 shadow-sm transition placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100'
+  'min-h-12 w-full rounded-md border border-slate-200 bg-white px-4 py-3 text-base text-navy-950 shadow-sm transition placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100 dark:border-white/15 dark:bg-white/[0.06] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-primary-400 dark:focus:ring-primary-300/20'
 
-const labelClass = 'mb-2 block text-sm font-semibold text-slate-800'
+const labelClass = 'mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-200'
 
 export function Contact() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -126,7 +126,7 @@ export function Contact() {
 
   return (
     <>
-      <section id="contact" className="section-padding bg-mist soft-grid">
+      <section id="contact" className="section-padding bg-mist soft-grid dark:bg-navy-950">
       <div className="container-shell">
         <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
           <div>
@@ -136,40 +136,40 @@ export function Contact() {
               Попълнете кратката форма и опишете какъв тип система ви интересува. Ние ще се свържем с вас възможно най-скоро.
             </p>
 
-            <div className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-soft">
-              <h3 className="text-xl font-semibold text-navy-950">DABH Engineering</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
+            <div className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-soft dark:border-white/10 dark:bg-white/[0.06] dark:shadow-glow">
+              <h3 className="text-xl font-semibold text-navy-950 dark:text-white">DABH Engineering</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Слаботокови системи, сигурност, автоматизация и мрежова инфраструктура.
               </p>
               <div className="mt-6 grid gap-4">
                 <a
                   href="tel:+359876150800"
-                  className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                  className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:text-primary-300"
                 >
                   <Phone aria-hidden="true" className="size-5 text-primary-600" />
                   <span>+359 876 150 800</span>
                 </a>
                 <a
                   href="mailto:dabhengineering.eu@gmail.com"
-                  className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                  className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:text-primary-300"
                 >
                   <Mail aria-hidden="true" className="size-5 text-primary-600" />
                   <span>dabhengineering.eu@gmail.com</span>
                 </a>
-                <div className="flex items-center gap-3 text-slate-700">
+                <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
                   <MapPin aria-hidden="true" className="size-5 text-primary-600" />
                   <span>Област Плевен, България</span>
                 </div>
               </div>
               
               <div className="mt-8">
-                <p className="mb-3 text-sm font-medium text-slate-500">Последвайте ни</p>
+                <p className="mb-3 text-sm font-medium text-slate-500 dark:text-slate-400">Последвайте ни</p>
                 <div className="flex items-center gap-4">
                   <a
                     href="https://www.facebook.com/profile.php?id=61572936225566"
                     target="_blank"
                     rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:border-primary-300/30 dark:hover:bg-primary-300/10 dark:hover:text-primary-300"
                     aria-label="Facebook"
                   >
                     <FacebookIcon className="size-5" />
@@ -178,7 +178,7 @@ export function Contact() {
                     href="https://www.instagram.com/dabhengineering/"
                     target="_blank"
                     rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:border-primary-300/30 dark:hover:bg-primary-300/10 dark:hover:text-primary-300"
                     aria-label="Instagram"
                   >
                     <InstagramIcon className="size-5" />
@@ -189,13 +189,13 @@ export function Contact() {
           </div>
 
           <form
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft sm:p-7"
+            className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.06] dark:shadow-glow sm:p-7"
             onSubmit={handleSubmit(onSubmit)}
             noValidate
           >
             {submitStatus === 'success' && (
               <div
-                className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900"
+                className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900 dark:border-green-700/30 dark:bg-green-900/20 dark:text-green-300"
                 role="status"
                 aria-live="polite"
               >
@@ -205,7 +205,7 @@ export function Contact() {
             
             {submitStatus === 'error' && (
               <div
-                className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900"
+                className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900 dark:border-red-700/30 dark:bg-red-900/20 dark:text-red-300"
                 role="status"
                 aria-live="polite"
               >
@@ -309,11 +309,11 @@ export function Contact() {
                 className={cn(
                   'flex flex-col gap-2 rounded-lg border p-4 transition-colors',
                   recaptchaError
-                    ? 'border-red-300 bg-red-50'
-                    : 'border-slate-200 bg-slate-50'
+                    ? 'border-red-300 bg-red-50 dark:border-red-700/30 dark:bg-red-900/20'
+                    : 'border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.04]'
                 )}
               >
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
                   <ShieldCheck aria-hidden="true" className="size-3.5 text-primary-500" />
                   <span>Потвърдете, че не сте робот</span>
                 </div>
@@ -336,7 +336,7 @@ export function Contact() {
             </div>
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-6 text-slate-500">
+              <p className="text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Вашите данни са защитени. С изпращането на запитването се съгласявате с нашата{' '}
                 <button
                   type="button"
@@ -379,7 +379,7 @@ function SubmitButton({ isReady, isLoading }: { isReady: boolean; isLoading: boo
         'relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-md px-6 text-sm font-semibold transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 sm:text-base',
         isReady && !isLoading
           ? 'bg-primary-500 text-navy-950 shadow-glow hover:bg-primary-400 hover:-translate-y-0.5 active:scale-95 cursor-pointer'
-          : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none border border-slate-200',
+          : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none border border-slate-200 dark:bg-white/[0.04] dark:text-slate-500 dark:border-white/10',
       )}
     >
       {/* Pulse glow — видим само когато е готов */}

@@ -35,9 +35,9 @@ const variantStyles: Record<ButtonVariant, string> = {
   primary:
     'bg-primary-500 text-navy-950 shadow-glow hover:bg-primary-300 focus-visible:ring-primary-300',
   secondary:
-    'border border-primary-200/70 bg-white/85 text-navy-950 shadow-soft hover:border-primary-300 hover:bg-white focus-visible:ring-primary-300',
+    'border border-primary-200/70 bg-white/85 text-navy-950 shadow-soft hover:border-primary-300 hover:bg-white focus-visible:ring-primary-300 dark:border-primary-300/20 dark:bg-white/10 dark:text-white dark:hover:border-primary-300/40 dark:hover:bg-white/15',
   ghost:
-    'bg-transparent text-slate-700 hover:bg-slate-100 focus-visible:ring-primary-300',
+    'bg-transparent text-slate-700 hover:bg-slate-100 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white',
   dark: 'border border-white/15 bg-white/10 text-white hover:bg-white/15 focus-visible:ring-primary-300',
 }
 

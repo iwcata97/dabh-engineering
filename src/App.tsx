@@ -13,11 +13,13 @@ import { ProjectsGalleryModal } from './components/ProjectsGalleryModal'
 import { ProjectsTeaser } from './components/ProjectsTeaser'
 import { ProductsTeaser } from './components/ProductsTeaser'
 import { ProductsCatalogModal } from './components/ProductsCatalogModal'
+import { useTheme } from './lib/useTheme'
 
 function App() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   const [isCatalogOpen, setIsCatalogOpen] = useState(false)
   const [initialProductId, setInitialProductId] = useState<string | undefined>()
+  const { theme, toggle: toggleTheme } = useTheme()
 
   // Read URL params on mount for deep linking
   useEffect(() => {
@@ -53,6 +55,8 @@ function App() {
       <Header
         onOpenGallery={() => setIsGalleryOpen(true)}
         onOpenCatalog={() => setIsCatalogOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
       <main>
         <Hero onOpenCatalog={() => setIsCatalogOpen(true)} />

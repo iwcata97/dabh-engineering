@@ -8,7 +8,7 @@ export function ProductsTeaser({ onOpenCatalog }: ProductsTeaserProps) {
   return (
     <section
       id="products"
-      className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white border-y border-slate-200/60"
+      className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white border-y border-slate-200/60 dark:from-navy-950 dark:via-graphite-900 dark:to-navy-950 dark:border-white/5"
     >
       <div className="container-shell relative z-10">
         <div className="overflow-hidden rounded-3xl bg-navy-950 p-8 sm:p-12 lg:p-16 text-white shadow-2xl border border-white/10 relative">

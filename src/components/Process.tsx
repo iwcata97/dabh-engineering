@@ -5,7 +5,7 @@ export function Process() {
   const reducedMotion = useReducedMotion()
 
   return (
-    <section id="process" className="section-padding bg-white">
+    <section id="process" className="section-padding bg-white dark:bg-graphite-900">
       <div className="container-shell">
         <div className="max-w-4xl">
           <p className="eyebrow">Процес</p>
@@ -23,7 +23,7 @@ export function Process() {
             return (
               <motion.article
                 key={step.title}
-                className="relative rounded-lg border border-slate-200 bg-mist p-5 shadow-soft"
+                className="relative rounded-lg border border-slate-200 bg-mist p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.04] dark:shadow-glow"
                 initial={reducedMotion ? false : { opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.28 }}
@@ -35,8 +35,8 @@ export function Process() {
                   </span>
                   <span className="text-3xl font-semibold text-primary-600/25">0{index + 1}</span>
                 </div>
-                <h3 className="text-lg font-semibold text-navy-950">{step.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{step.description}</p>
+                <h3 className="text-lg font-semibold text-navy-950 dark:text-white">{step.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{step.description}</p>
               </motion.article>
             )
           })}

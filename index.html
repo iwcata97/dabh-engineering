@@ -25,7 +25,22 @@
       content="Комплексни инженерни решения за сигурност, контрол, автоматизация и локална мрежова инфраструктура."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#07111f" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Instantly restore saved theme from localStorage or fallback to OS preference
+      // Runs in <head> before page paint to prevent any flash of incorrect theme
+      (function() {
+        try {
+          var t = localStorage.getItem('dabh-theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (t === 'dark' || (!t && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>DABH Engineering | Слаботокови системи и автоматизация</title>
   </head>
   <body>
