@@ -14,6 +14,7 @@ import { ProjectsTeaser } from './components/ProjectsTeaser'
 import { ProductsTeaser } from './components/ProductsTeaser'
 import { ProductsCatalogModal } from './components/ProductsCatalogModal'
 import { FeatureHintToast } from './components/ui/FeatureHintToast'
+import { ScrollToTop } from './components/ui/ScrollToTop'
 import { useTheme } from './lib/useTheme'
 
 function App() {
@@ -75,6 +76,7 @@ function App() {
         onOpenCatalog={() => setIsCatalogOpen(true)}
       />
       <CookieConsent />
+      <ScrollToTop />
       <ProjectsGalleryModal
         isOpen={isGalleryOpen}
         onClose={() => setIsGalleryOpen(false)}

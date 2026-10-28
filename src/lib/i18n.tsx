@@ -351,6 +351,9 @@ const translations: Record<Language, Record<string, string>> = {
     'hint.switchThemeLight': 'Светъл режим',
     'hint.dismiss': 'Разбрах',
     'hint.close': 'Затвори известието',
+
+    // Scroll to Top
+    'scroll.top': 'Върни се най-горе',
   },
 
   en: {
@@ -643,5 +646,8 @@ const translations: Record<Language, Record<string, string>> = {
     'hint.switchThemeLight': 'Light mode',
     'hint.dismiss': 'Got it',
     'hint.close': 'Close notification',
+
+    // Scroll to Top
+    'scroll.top': 'Scroll to top',
   },
 }

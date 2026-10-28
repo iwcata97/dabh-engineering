@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
-import { Mail, MapPin, Phone, ShieldCheck, Send, Loader2 } from 'lucide-react'
+import { Mail, MapPin, Phone, ShieldCheck, Send, Loader2, ChevronDown } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import { supabase } from '../lib/supabase'
 import { useLanguage } from '../lib/i18n'
@@ -274,39 +274,65 @@ export function Contact() {
                 </Field>
 
                 <Field label={t('contact.labelObjectType')} error={errors.objectType?.message}>
-                  <select
-                    className={cn(fieldClass, 'appearance-none')}
-                    defaultValue=""
-                    {...register('objectType', { required: t('contact.errorObjectRequired') })}
-                  >
-                    <option value="" disabled>
-                      {t('contact.selectDefault')}
-                    </option>
-                    {objectTypeKeys.map((item) => (
-                      <option key={item.value} value={t(item.key)}>
-                        {t(item.key)}
+                  <div className="relative">
+                    <select
+                      className={cn(
+                        fieldClass,
+                        'appearance-none pr-10 cursor-pointer dark:[color-scheme:dark] [&>option]:bg-white [&>option]:text-navy-950 dark:[&>option]:bg-navy-900 dark:[&>option]:text-white'
+                      )}
+                      defaultValue=""
+                      {...register('objectType', { required: t('contact.errorObjectRequired') })}
+                    >
+                      <option value="" disabled className="text-slate-400 dark:text-slate-500">
+                        {t('contact.selectDefault')}
                       </option>
-                    ))}
-                  </select>
+                      {objectTypeKeys.map((item) => (
+                        <option
+                          key={item.value}
+                          value={t(item.key)}
+                          className="bg-white text-navy-950 dark:bg-navy-900 dark:text-white"
+                        >
+                          {t(item.key)}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 size-4 text-slate-400 dark:text-slate-400"
+                    />
+                  </div>
                 </Field>
               </div>
 
               <div className="mt-5">
                 <Field label={t('contact.labelService')} error={errors.service?.message}>
-                  <select
-                    className={cn(fieldClass, 'appearance-none')}
-                    defaultValue=""
-                    {...register('service', { required: t('contact.errorServiceRequired') })}
-                  >
-                    <option value="" disabled>
-                      {t('contact.selectService')}
-                    </option>
-                    {serviceKeys.map((key) => (
-                      <option key={key} value={t(key)}>
-                        {t(key)}
+                  <div className="relative">
+                    <select
+                      className={cn(
+                        fieldClass,
+                        'appearance-none pr-10 cursor-pointer dark:[color-scheme:dark] [&>option]:bg-white [&>option]:text-navy-950 dark:[&>option]:bg-navy-900 dark:[&>option]:text-white'
+                      )}
+                      defaultValue=""
+                      {...register('service', { required: t('contact.errorServiceRequired') })}
+                    >
+                      <option value="" disabled className="text-slate-400 dark:text-slate-500">
+                        {t('contact.selectService')}
                       </option>
-                    ))}
-                  </select>
+                      {serviceKeys.map((key) => (
+                        <option
+                          key={key}
+                          value={t(key)}
+                          className="bg-white text-navy-950 dark:bg-navy-900 dark:text-white"
+                        >
+                          {t(key)}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 size-4 text-slate-400 dark:text-slate-400"
+                    />
+                  </div>
                 </Field>
               </div>
 

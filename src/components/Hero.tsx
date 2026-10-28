@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, CheckCircle2, Cpu, LockKeyhole } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Cpu, LockKeyhole, Package } from 'lucide-react'
 import { heroNodes } from '../data/content'
 import { useLanguage } from '../lib/i18n'
 import { cn } from '../lib/utils'
@@ -57,8 +57,9 @@ export function Hero({ onOpenCatalog }: HeroProps) {
               <Button 
                 onClick={onOpenCatalog} 
                 size="lg" 
-                variant="ghost" 
-                className="bg-white text-navy-950 font-bold hover:bg-slate-100 transition-colors"
+                variant="dark"
+                icon={Package}
+                className="border-amber-400/40 bg-amber-400/10 text-amber-300 hover:border-amber-400/70 hover:bg-amber-400/20 hover:text-white transition-all shadow-sm"
               >
                 {t('hero.ctaCatalog')}
               </Button>
