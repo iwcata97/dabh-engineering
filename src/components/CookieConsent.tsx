@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, X } from 'lucide-react';
+import { useLanguage } from '../lib/i18n';
 
 declare global {
   interface Window {
@@ -37,6 +38,7 @@ export const initGA = () => {
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const consent = localStorage.getItem('cookieConsent');
@@ -76,6 +78,7 @@ export function CookieConsent() {
                 <button
                   onClick={handleDecline}
                   className="text-gray-400 hover:text-gray-500"
+                  aria-label={t('cookie.decline')}
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -87,8 +90,7 @@ export function CookieConsent() {
 
               <div className="flex-1 text-sm text-gray-600 dark:text-slate-300">
                 <p>
-                  Използваме бисквитки, за да анализираме трафика на сайта и да подобрим вашето преживяване. 
-                  Като кликнете върху „Приемам всички“, вие се съгласявате с използването на бисквитки.
+                  {t('cookie.text')}
                 </p>
               </div>
 
@@ -97,13 +99,13 @@ export function CookieConsent() {
                   onClick={handleDecline}
                   className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-white/10 transition-colors"
                 >
-                  Отказвам
+                  {t('cookie.decline')}
                 </button>
                 <button
                   onClick={handleAccept}
-                  className="rounded-lg bg-primary-500 px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm hover:bg-primary-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-colors"
+                  className="rounded-lg bg-primary-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-colors"
                 >
-                  Приемам всички
+                  {t('cookie.accept')}
                 </button>
               </div>
             </div>

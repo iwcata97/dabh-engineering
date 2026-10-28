@@ -1,9 +1,10 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Camera, Menu, Package, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { navLinks } from '../data/content'
+import { useLanguage } from '../lib/i18n'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
+import { LanguageToggle } from './ui/LanguageToggle'
 import { ThemeToggle } from './ui/ThemeToggle'
 
 interface HeaderProps {
@@ -13,10 +14,21 @@ interface HeaderProps {
   onToggleTheme: () => void
 }
 
+const navHrefs = ['#home', '#services', '#process', '#products', '#about', '#contact']
+const navLabelKeys = [
+  'nav.home',
+  'nav.services',
+  'nav.process',
+  'nav.products',
+  'nav.about',
+  'nav.contact',
+]
+
 export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('#home')
   const reducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   const closeMenu = () => setIsOpen(false)
 
@@ -32,8 +44,8 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
       { rootMargin: '-50% 0px -50% 0px' }
     )
 
-    navLinks.forEach((link) => {
-      const id = link.href.substring(1)
+    navHrefs.forEach((href) => {
+      const id = href.substring(1)
       const element = document.getElementById(id)
       if (element) {
         observer.observe(element)
@@ -51,25 +63,25 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
             href="#home"
             className="flex items-center gap-3 rounded-md py-2 pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
             onClick={closeMenu}
-            aria-label="DABH Engineering начало"
+            aria-label={t('header.homeLabel')}
           >
             <span className="flex size-10 items-center justify-center overflow-hidden rounded-md bg-navy-950 shadow-glow">
               <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-full object-cover" />
             </span>
             <span className="flex flex-col leading-none">
               <span className="text-sm font-bold text-navy-950 dark:text-white sm:text-base">DABH Engineering</span>
-              <span className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">ДАБХ Инженеринг</span>
+              <span className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">{t('header.subtitle')}</span>
             </span>
           </a>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Основна навигация">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href
+          <nav className="hidden items-center gap-1 lg:flex" aria-label={t('header.mainNav')}>
+            {navHrefs.map((href, idx) => {
+              const isActive = activeSection === href
 
               return (
                 <a
-                  key={link.href}
-                  href={link.href}
+                  key={href}
+                  href={href}
                   className={cn(
                     'rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
                     isActive
@@ -77,7 +89,7 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
                       : 'text-slate-700 hover:bg-slate-100 hover:text-navy-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
                   )}
                 >
-                  {link.label}
+                  {t(navLabelKeys[idx])}
                 </a>
               )
             })}
@@ -88,7 +100,7 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
                 className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-primary-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:bg-primary-300/10 dark:hover:text-white"
               >
                 <Camera className="size-4 text-primary-600 dark:text-primary-300" />
-                <span>Галерия</span>
+                <span>{t('nav.gallery')}</span>
               </button>
             )}
             {onOpenCatalog && (
@@ -98,24 +110,26 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
                 className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-amber-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 dark:text-slate-300 dark:hover:bg-amber-300/10 dark:hover:text-white"
               >
                 <Package className="size-4 text-amber-600 dark:text-amber-300" />
-                <span>Каталог</span>
+                <span>{t('nav.catalog')}</span>
               </button>
             )}
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
+            <LanguageToggle />
             <ThemeToggle theme={theme} toggle={onToggleTheme} />
             <Button href="#contact" size="sm" icon={ArrowRight}>
-              Консултация
+              {t('nav.consultation')}
             </Button>
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
+            <LanguageToggle />
             <ThemeToggle theme={theme} toggle={onToggleTheme} />
             <button
               type="button"
               className="inline-flex size-11 items-center justify-center rounded-md border border-slate-200 bg-white text-navy-950 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-              aria-label={isOpen ? 'Затвори менюто' : 'Отвори менюто'}
+              aria-label={isOpen ? t('header.closeMenu') : t('header.openMenu')}
               aria-expanded={isOpen}
               onClick={() => setIsOpen((currentState) => !currentState)}
             >
@@ -127,7 +141,7 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
         <AnimatePresence>
           {isOpen ? (
             <motion.nav
-              aria-label="Мобилна навигация"
+              aria-label={t('header.mobileNav')}
               className="mt-2 overflow-hidden rounded-lg border border-white/30 bg-white/95 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-navy-950/95 lg:hidden"
               initial={reducedMotion ? false : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -135,13 +149,13 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
               transition={{ duration: 0.2 }}
             >
               <div className="grid gap-1 p-3">
-                {navLinks.map((link) => {
-                  const isActive = activeSection === link.href
+                {navHrefs.map((href, idx) => {
+                  const isActive = activeSection === href
 
                   return (
                     <a
-                      key={link.href}
-                      href={link.href}
+                      key={href}
+                      href={href}
                       className={cn(
                         'rounded-md px-4 py-3 text-base font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
                         isActive
@@ -150,7 +164,7 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
                       )}
                       onClick={closeMenu}
                     >
-                      {link.label}
+                      {t(navLabelKeys[idx])}
                     </a>
                   )
                 })}
@@ -165,7 +179,7 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
                   >
                     <span className="flex items-center gap-2">
                       <Camera className="size-4 text-primary-600 dark:text-primary-300" />
-                      <span>Галерия обекти</span>
+                      <span>{t('header.galleryObjects')}</span>
                     </span>
                   </button>
                 )}
@@ -180,12 +194,12 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
                   >
                     <span className="flex items-center gap-2">
                       <Package className="size-4 text-amber-600 dark:text-amber-300" />
-                      <span>Каталог продукти</span>
+                      <span>{t('header.catalogProducts')}</span>
                     </span>
                   </button>
                 )}
                 <Button href="#contact" className="mt-2 w-full" icon={ArrowRight} onClick={closeMenu}>
-                  Заявете консултация
+                  {t('nav.requestConsultation')}
                 </Button>
               </div>
             </motion.nav>

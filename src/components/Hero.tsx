@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, CheckCircle2, Cpu, LockKeyhole } from 'lucide-react'
-import { heroNodes, trustItems } from '../data/content'
+import { heroNodes } from '../data/content'
+import { useLanguage } from '../lib/i18n'
 import { cn } from '../lib/utils'
 import { Button } from './ui/Button'
 
@@ -11,12 +12,15 @@ const nodePositions = [
   'bottom-[18%] right-[12%]',
 ]
 
+const trustKeys = ['hero.trust1', 'hero.trust2', 'hero.trust3', 'hero.trust4']
+
 interface HeroProps {
   onOpenCatalog?: () => void
 }
 
 export function Hero({ onOpenCatalog }: HeroProps) {
   const reducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   return (
     <section
@@ -34,22 +38,21 @@ export function Hero({ onOpenCatalog }: HeroProps) {
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
             <p className="mb-4 inline-flex rounded-full border border-primary-300/30 bg-primary-300/10 px-4 py-2 text-sm font-semibold text-primary-100">
-              Слаботокови системи за реални обекти
+              {t('hero.badge')}
             </p>
             <h1 className="text-balance text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              Сигурност, автоматизация и слаботокови системи за модерни пространства.
+              {t('hero.title')}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
-              Проектиране, изграждане и поддръжка на видеонаблюдение, контрол на достъпа,
-              сградна автоматизация и структурни кабелни системи за домове и бизнес обекти.
+              {t('hero.description')}
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row flex-wrap">
               <Button href="#contact" size="lg" icon={ArrowRight}>
-                Заявете консултация
+                {t('hero.ctaConsultation')}
               </Button>
               <Button href="#services" size="lg" variant="dark">
-                Вижте услугите
+                {t('hero.ctaServices')}
               </Button>
               <Button 
                 onClick={onOpenCatalog} 
@@ -57,7 +60,7 @@ export function Hero({ onOpenCatalog }: HeroProps) {
                 variant="ghost" 
                 className="bg-white text-navy-950 font-bold hover:bg-slate-100 transition-colors"
               >
-                Разгледайте каталога
+                {t('hero.ctaCatalog')}
               </Button>
             </div>
           </motion.div>
@@ -108,10 +111,10 @@ export function Hero({ onOpenCatalog }: HeroProps) {
         </div>
 
         <div className="mt-12 grid gap-3 rounded-lg border border-white/10 bg-white/[0.06] p-3 shadow-glow backdrop-blur-xl sm:grid-cols-2 lg:grid-cols-4">
-          {trustItems.map((item) => (
-            <div key={item} className="flex items-center gap-3 rounded-md bg-white/[0.05] px-4 py-4">
+          {trustKeys.map((key) => (
+            <div key={key} className="flex items-center gap-3 rounded-md bg-white/[0.05] px-4 py-4">
               <CheckCircle2 aria-hidden="true" className="size-5 shrink-0 text-primary-300" />
-              <span className="text-sm font-semibold text-white">{item}</span>
+              <span className="text-sm font-semibold text-white">{t(key)}</span>
             </div>
           ))}
         </div>

@@ -1,10 +1,13 @@
 import { ArrowRight, Camera, CheckCircle2, Sparkles } from 'lucide-react'
+import { useLanguage } from '../lib/i18n'
 
 interface ProjectsTeaserProps {
   onOpenGallery: () => void
 }
 
 export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
+  const { t } = useLanguage()
+
   return (
     <section className="py-16 sm:py-24 relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50 border-y border-slate-200/60 dark:from-graphite-900 dark:via-navy-950 dark:to-graphite-900 dark:border-white/5">
       <div className="container-shell relative z-10">
@@ -18,39 +21,28 @@ export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-cyan-300 border border-white/15">
                 <Sparkles className="size-3.5 text-primary-400 animate-pulse" />
-                <span>Реално изпълнени обекти</span>
+                <span>{t('projects.badge')}</span>
               </div>
 
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
-                Реализирани обекти &ndash;{' '}
+                {t('projects.title1')} &ndash;{' '}
                 <br className="hidden sm:inline" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-cyan-300 to-white">
-                  Галерия от нашите монтажи
+                  {t('projects.title2')}
                 </span>
               </h2>
 
               <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                Разгледайте реални снимки от обекти, изпълнени от нашия екип &ndash; видеонаблюдение,
-                кабелна инфраструктура и слаботокови системи за различни типове обекти.
+                {t('projects.description')}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
-                  <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-                  <span>Видеонаблюдение и охранителни камери</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
-                  <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-                  <span>Кабелна инфраструктура и окабеляване</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
-                  <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-                  <span>Жилищни, офис и производствени обекти</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
-                  <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
-                  <span>Галерията се допълва с нови обекти</span>
-                </div>
+                {(['projects.check1', 'projects.check2', 'projects.check3', 'projects.check4'] as const).map((key) => (
+                  <div key={key} className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
+                    <CheckCircle2 className="size-4 text-emerald-400 shrink-0" />
+                    <span>{t(key)}</span>
+                  </div>
+                ))}
               </div>
 
               <div className="pt-4 flex flex-wrap items-center gap-4">
@@ -59,7 +51,7 @@ export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
                   className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-cyan-400 px-7 py-3.5 text-sm font-bold text-navy-950 shadow-lg shadow-primary-500/25 transition-all hover:scale-105 hover:shadow-xl hover:shadow-primary-500/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
                 >
                   <Camera className="size-4 text-navy-950" />
-                  <span>Галерия изпълнени обекти</span>
+                  <span>{t('projects.cta')}</span>
                   <ArrowRight className="size-4" />
                 </button>
               </div>
@@ -74,15 +66,15 @@ export function ProjectsTeaser({ onOpenGallery }: ProjectsTeaserProps) {
                 <div className="aspect-[4/3] relative overflow-hidden">
                   <img
                     src="/gallery/project-05.jpg"
-                    alt="Монтаж на IP камери на складова база"
+                    alt={t('projects.imgAlt')}
                     className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/30 to-transparent" />
 
                   <div className="absolute bottom-4 inset-x-4 flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-white">Видеонаблюдение &ndash; Складова база</p>
-                      <p className="text-[11px] text-slate-300">Щракнете, за да видите всички обекти</p>
+                      <p className="text-xs font-bold text-white">{t('projects.previewTitle')}</p>
+                      <p className="text-[11px] text-slate-300">{t('projects.previewSubtitle')}</p>
                     </div>
                     <span className="flex size-9 items-center justify-center rounded-full bg-white/20 text-white transition group-hover:bg-primary-500 group-hover:text-navy-950">
                       <Camera className="size-4" />

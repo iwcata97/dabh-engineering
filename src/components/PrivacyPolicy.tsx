@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Shield, X } from 'lucide-react'
 import { useEffect } from 'react'
+import { useLanguage } from '../lib/i18n'
 
 interface PrivacyPolicyProps {
   isOpen: boolean
@@ -8,6 +9,8 @@ interface PrivacyPolicyProps {
 }
 
 export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
+  const { t } = useLanguage()
+
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -60,12 +63,12 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
                   id="privacy-policy-title"
                   className="text-base font-semibold text-white sm:text-lg"
                 >
-                  Политика за поверителност и бисквитки
+                  {t('privacy.title')}
                 </h1>
               </div>
               <button
                 onClick={onClose}
-                aria-label="Затвори"
+                aria-label={t('privacy.close')}
                 className="flex size-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
               >
                 <X className="size-5" />
@@ -76,24 +79,23 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
             <div className="flex-1 overflow-y-auto px-6 py-8 sm:px-10 sm:py-10 text-slate-700 text-sm leading-7">
 
               <p className="text-slate-500 text-xs uppercase tracking-widest font-semibold mb-6">
-                Последна актуализация: {new Date().getFullYear()} г.
+                {t('privacy.lastUpdate')}: {new Date().getFullYear()} {t('privacy.year')}
               </p>
 
               <p className="mb-8 text-base text-slate-600 leading-relaxed">
-                Настоящата политика обяснява как <strong className="text-navy-950">"ДАБХ Инженеринг" ЕООД</strong> събира,
-                обработва и защитава вашите лични данни, както и как използваме "бисквитки" (cookies) на нашия уебсайт.
+                {t('privacy.intro')} <strong className="text-navy-950">{t('privacy.introCompany')}</strong> {t('privacy.introEnd')}
               </p>
 
               {/* Section 1 */}
-              <Section number="1" title="Кои сме ние?">
+              <Section number="1" title={t('privacy.section1.title')}>
                 <p>
-                  Администратор на лични данни е <strong className="text-navy-950">"ДАБХ Инженеринг" ЕООД</strong>,
-                  ЕИК <strong className="text-navy-950">208163364</strong>, със седалище и адрес на управление:
-                  гр. Плевен, ул. Асен Халачев 16. При въпроси можете да се свържете с нас на имейл:{' '}
+                  {t('privacy.section1.text1')} <strong className="text-navy-950">{t('privacy.introCompany')}</strong>
+                  {t('privacy.section1.text2')} <strong className="text-navy-950">208163364</strong>
+                  {t('privacy.section1.text3')}{' '}
                   <a href="mailto:dabhengineering.eu@gmail.com" className="text-primary-600 hover:underline font-medium">
                     dabhengineering.eu@gmail.com
                   </a>{' '}
-                  или на телефон:{' '}
+                  {t('privacy.section1.text4')}{' '}
                   <a href="tel:+359876150800" className="text-primary-600 hover:underline font-medium">
                     +359 876 150 800
                   </a>.
@@ -101,19 +103,18 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
               </Section>
 
               {/* Divider */}
-              <PartDivider label="ЧАСТ I: ЗАЩИТА НА ЛИЧНИТЕ ДАННИ" />
+              <PartDivider label={t('privacy.part1')} />
 
               {/* Section 2 */}
-              <Section number="2" title="Какви данни събираме и защо?">
+              <Section number="2" title={t('privacy.section2.title')}>
                 <p className="mb-3">
-                  Чрез контактната форма на нашия уебсайт ние събираме само данните, които вие доброволно ни
-                  предоставяте (имена, телефон, имейл и текст на запитването). Ние ги обработваме единствено с цел:
+                  {t('privacy.section2.text')}
                 </p>
                 <ul className="space-y-2 pl-1">
                   {[
-                    'Да отговорим на вашето запитване;',
-                    'Да изготвим оферта за изграждане и поддръжка на слаботокови системи;',
-                    'Да осъществим комуникация във връзка с изпълнение на услуги.',
+                    t('privacy.section2.b1'),
+                    t('privacy.section2.b2'),
+                    t('privacy.section2.b3'),
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2">
                       <span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary-500" />
@@ -124,61 +125,54 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
               </Section>
 
               {/* Section 3 */}
-              <Section number="3" title="Споделяне и съхранение на данните">
+              <Section number="3" title={t('privacy.section3.title')}>
                 <p>
-                  Вашите данни се пазят строго конфиденциално и не се продават или споделят с трети страни за
-                  маркетинг. Съхраняваме запитванията до приключване на комуникацията по тях или до изтичане на
-                  законовите срокове, ако отношенията ни прераснат в договорни.
+                  {t('privacy.section3.text')}
                 </p>
               </Section>
 
               {/* Section 4 */}
-              <Section number="4" title="Вашите права (GDPR)">
+              <Section number="4" title={t('privacy.section4.title')}>
                 <p>
-                  Вие имате право по всяко време да поискате достъп, корекция или изтриване ("правото да бъдеш
-                  забравен") на вашите лични данни, както и да оттеглите съгласието си за тяхната обработка, като
-                  ни пишете на посочения имейл адрес.
+                  {t('privacy.section4.text')}
                 </p>
               </Section>
 
               {/* Divider */}
-              <PartDivider label="ЧАСТ II: ПОЛИТИКА ЗА БИСКВИТКИ (COOKIES)" />
+              <PartDivider label={t('privacy.part2')} />
 
               {/* Section 5 */}
-              <Section number="5" title="Какво представляват бисквитките?">
+              <Section number="5" title={t('privacy.section5.title')}>
                 <p>
-                  Бисквитките са малки текстови файлове, които се запазват на вашето устройство при посещение на
-                  сайта. Те помагат за правилното му функциониране и запомнят вашите предпочитания.
+                  {t('privacy.section5.text')}
                 </p>
               </Section>
 
               {/* Section 6 */}
-              <Section number="6" title="Какви бисквитки използваме?">
+              <Section number="6" title={t('privacy.section6.title')}>
                 <div className="space-y-4">
                   <CookieCard
-                    title="Строго необходими бисквитки"
-                    description="Задължителни за функционирането на сайта. Те не събират лична информация за маркетинг."
+                    title={t('privacy.section6.c1.title')}
+                    description={t('privacy.section6.c1.description')}
                     color="emerald"
                   />
                   <CookieCard
-                    title="Функционални бисквитки"
-                    description="Запомнят вашите избори на сайта."
+                    title={t('privacy.section6.c2.title')}
+                    description={t('privacy.section6.c2.description')}
                     color="blue"
                   />
                   <CookieCard
-                    title="Аналитични бисквитки"
-                    description="Помагат ни да събираме анонимна статистика за посещаемостта, за да подобряваме потребителското изживяване."
+                    title={t('privacy.section6.c3.title')}
+                    description={t('privacy.section6.c3.description')}
                     color="primary"
                   />
                 </div>
               </Section>
 
               {/* Section 7 */}
-              <Section number="7" title="Управление на бисквитките">
+              <Section number="7" title={t('privacy.section7.title')}>
                 <p>
-                  Можете да контролирате, блокирате или изтривате бисквитките чрез настройките на вашия браузър
-                  (Chrome, Firefox, Safari, Edge и др.). Имайте предвид, че блокирането на някои бисквитки може
-                  да наруши нормалната работа на сайта.
+                  {t('privacy.section7.text')}
                 </p>
               </Section>
             </div>
@@ -189,7 +183,7 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
                 onClick={onClose}
                 className="rounded-lg bg-navy-950 px-5 py-2 text-sm font-semibold text-white transition hover:bg-navy-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
               >
-                Затвори
+                {t('privacy.close')}
               </button>
             </div>
           </motion.div>

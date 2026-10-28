@@ -1,9 +1,11 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useLanguage } from '../lib/i18n'
 import { Button } from './ui/Button'
 
 export function CTA() {
   const reducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   return (
     <section className="bg-white px-4 py-6 dark:bg-graphite-900 sm:px-6 lg:px-8">
@@ -18,16 +20,15 @@ export function CTA() {
           <div className="absolute inset-0 technical-grid opacity-25" aria-hidden="true" />
           <div className="relative z-10">
             <h2 className="text-balance text-2xl font-semibold leading-tight sm:text-3xl lg:text-4xl">
-              Имате обект, който се нуждае от сигурност, контрол или автоматизация?
+              {t('cta.title')}
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300 sm:text-lg">
-              Опишете нуждите си и ще подготвим подходящо решение според мащаба, бюджета и
-              спецификата на обекта.
+              {t('cta.description')}
             </p>
           </div>
           <div className="relative z-10">
             <Button href="#contact" size="lg" icon={ArrowRight}>
-              Свържете се с нас
+              {t('cta.button')}
             </Button>
           </div>
         </div>

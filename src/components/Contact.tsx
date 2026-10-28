@@ -3,6 +3,12 @@ import type { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 import { Mail, MapPin, Phone, ShieldCheck, Send, Loader2 } from 'lucide-react'
+import emailjs from '@emailjs/browser'
+import { supabase } from '../lib/supabase'
+import { useLanguage } from '../lib/i18n'
+import { cn } from '../lib/utils'
+import { PrivacyPolicy } from './PrivacyPolicy'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -21,12 +27,6 @@ function InstagramIcon({ className }: { className?: string }) {
     </svg>
   )
 }
-import { objectTypes, services } from '../data/content'
-import emailjs from '@emailjs/browser'
-import { supabase } from '../lib/supabase'
-import { cn } from '../lib/utils'
-import { PrivacyPolicy } from './PrivacyPolicy'
-import ReCAPTCHA from 'react-google-recaptcha'
 
 type ContactFormValues = {
   name: string
@@ -42,7 +42,25 @@ const fieldClass =
 
 const labelClass = 'mb-2 block text-sm font-semibold text-slate-800 dark:text-slate-200'
 
+const objectTypeKeys = [
+  { value: 'home', key: 'contact.objectTypes.home' },
+  { value: 'office', key: 'contact.objectTypes.office' },
+  { value: 'commercial', key: 'contact.objectTypes.commercial' },
+  { value: 'warehouse', key: 'contact.objectTypes.warehouse' },
+  { value: 'industrial', key: 'contact.objectTypes.industrial' },
+  { value: 'other', key: 'contact.objectTypes.other' },
+]
+
+const serviceKeys = [
+  'services.s1.title',
+  'services.s2.title',
+  'services.s3.title',
+  'services.s4.title',
+  'services.s5.title',
+]
+
 export function Contact() {
+  const { t, lang } = useLanguage()
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
@@ -67,7 +85,6 @@ export function Contact() {
     !!watchedValues.message?.trim()
 
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
-    // Проверка дали reCAPTCHA е потвърдена
     if (!recaptchaToken) {
       setRecaptchaError(true)
       return
@@ -75,7 +92,7 @@ export function Contact() {
     setRecaptchaError(false)
     setSubmitStatus('loading')
     try {
-      // 1. Записваме в Supabase
+      // 1. Save to Supabase
       const { error } = await supabase
         .from('contact_requests')
         .insert([
@@ -91,7 +108,7 @@ export function Contact() {
 
       if (error) throw error
 
-      // 2. Изпращаме имейли чрез EmailJS
+      // 2. Send emails via EmailJS
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
       const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
@@ -127,231 +144,236 @@ export function Contact() {
   return (
     <>
       <section id="contact" className="section-padding bg-mist soft-grid dark:bg-navy-950">
-      <div className="container-shell">
-        <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
-          <div>
-            <p className="eyebrow">Контакт</p>
-            <h2 className="section-title">Заявете консултация за вашия обект</h2>
-            <p className="section-copy">
-              Попълнете кратката форма и опишете какъв тип система ви интересува. Ние ще се свържем с вас възможно най-скоро.
-            </p>
-
-            <div className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-soft dark:border-white/10 dark:bg-white/[0.06] dark:shadow-glow">
-              <h3 className="text-xl font-semibold text-navy-950 dark:text-white">DABH Engineering</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                Слаботокови системи, сигурност, автоматизация и мрежова инфраструктура.
+        <div className="container-shell">
+          <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
+            <div>
+              <p className="eyebrow">{t('contact.eyebrow')}</p>
+              <h2 className="section-title">{t('contact.title')}</h2>
+              <p className="section-copy">
+                {t('contact.description')}
               </p>
-              <div className="mt-6 grid gap-4">
-                <a
-                  href="tel:+359876150800"
-                  className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:text-primary-300"
-                >
-                  <Phone aria-hidden="true" className="size-5 text-primary-600" />
-                  <span>+359 876 150 800</span>
-                </a>
-                <a
-                  href="mailto:dabhengineering.eu@gmail.com"
-                  className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:text-primary-300"
-                >
-                  <Mail aria-hidden="true" className="size-5 text-primary-600" />
-                  <span>dabhengineering.eu@gmail.com</span>
-                </a>
-                <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
-                  <MapPin aria-hidden="true" className="size-5 text-primary-600" />
-                  <span>Област Плевен, България</span>
+
+              <div className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-soft dark:border-white/10 dark:bg-white/[0.06] dark:shadow-glow">
+                <h3 className="text-xl font-semibold text-navy-950 dark:text-white">DABH Engineering</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  {t('contact.subtitle')}
+                </p>
+                <div className="mt-6 grid gap-4">
+                  <a
+                    href="tel:+359876150800"
+                    className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:text-primary-300"
+                  >
+                    <Phone aria-hidden="true" className="size-5 text-primary-600" />
+                    <span>+359 876 150 800</span>
+                  </a>
+                  <a
+                    href="mailto:dabhengineering.eu@gmail.com"
+                    className="flex items-center gap-3 rounded-md text-slate-700 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:text-primary-300"
+                  >
+                    <Mail aria-hidden="true" className="size-5 text-primary-600" />
+                    <span>dabhengineering.eu@gmail.com</span>
+                  </a>
+                  <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                    <MapPin aria-hidden="true" className="size-5 text-primary-600" />
+                    <span>{t('contact.location')}</span>
+                  </div>
+                </div>
+                
+                <div className="mt-8">
+                  <p className="mb-3 text-sm font-medium text-slate-500 dark:text-slate-400">{t('contact.followUs')}</p>
+                  <div className="flex items-center gap-4">
+                    <a
+                      href="https://www.facebook.com/profile.php?id=61572936225566"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:border-primary-300/30 dark:hover:bg-primary-300/10 dark:hover:text-primary-300"
+                      aria-label="Facebook"
+                    >
+                      <FacebookIcon className="size-5" />
+                    </a>
+                    <a
+                      href="https://www.instagram.com/dabhengineering/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:border-primary-300/30 dark:hover:bg-primary-300/10 dark:hover:text-primary-300"
+                      aria-label="Instagram"
+                    >
+                      <InstagramIcon className="size-5" />
+                    </a>
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <form
+              className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.06] dark:shadow-glow sm:p-7"
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate
+            >
+              {submitStatus === 'success' && (
+                <div
+                  className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900 dark:border-green-700/30 dark:bg-green-900/20 dark:text-green-300"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {t('contact.successMessage')}
+                </div>
+              )}
               
-              <div className="mt-8">
-                <p className="mb-3 text-sm font-medium text-slate-500 dark:text-slate-400">Последвайте ни</p>
-                <div className="flex items-center gap-4">
-                  <a
-                    href="https://www.facebook.com/profile.php?id=61572936225566"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:border-primary-300/30 dark:hover:bg-primary-300/10 dark:hover:text-primary-300"
-                    aria-label="Facebook"
+              {submitStatus === 'error' && (
+                <div
+                  className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900 dark:border-red-700/30 dark:bg-red-900/20 dark:text-red-300"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {t('contact.errorMessage')}
+                </div>
+              )}
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field label={t('contact.labelName')} error={errors.name?.message}>
+                  <input
+                    className={fieldClass}
+                    type="text"
+                    autoComplete="name"
+                    placeholder={t('contact.placeholderName')}
+                    {...register('name', { required: t('contact.errorNameRequired') })}
+                  />
+                </Field>
+
+                <Field label={t('contact.labelPhone')} error={errors.phone?.message}>
+                  <input
+                    className={fieldClass}
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder={t('contact.placeholderPhone')}
+                    {...register('phone', {
+                      required: t('contact.errorPhoneRequired'),
+                      pattern: {
+                        value: /^(?:\+359|0)\d{9}$/,
+                        message: t('contact.errorPhonePattern'),
+                      },
+                    })}
+                  />
+                </Field>
+
+                <Field label={t('contact.labelEmail')} error={errors.email?.message}>
+                  <input
+                    className={fieldClass}
+                    type="email"
+                    autoComplete="email"
+                    placeholder="name@example.com"
+                    {...register('email', {
+                      required: t('contact.errorEmailRequired'),
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: t('contact.errorEmailPattern'),
+                      },
+                    })}
+                  />
+                </Field>
+
+                <Field label={t('contact.labelObjectType')} error={errors.objectType?.message}>
+                  <select
+                    className={cn(fieldClass, 'appearance-none')}
+                    defaultValue=""
+                    {...register('objectType', { required: t('contact.errorObjectRequired') })}
                   >
-                    <FacebookIcon className="size-5" />
-                  </a>
-                  <a
-                    href="https://www.instagram.com/dabhengineering/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:border-primary-300/30 dark:hover:bg-primary-300/10 dark:hover:text-primary-300"
-                    aria-label="Instagram"
+                    <option value="" disabled>
+                      {t('contact.selectDefault')}
+                    </option>
+                    {objectTypeKeys.map((item) => (
+                      <option key={item.value} value={t(item.key)}>
+                        {t(item.key)}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
+
+              <div className="mt-5">
+                <Field label={t('contact.labelService')} error={errors.service?.message}>
+                  <select
+                    className={cn(fieldClass, 'appearance-none')}
+                    defaultValue=""
+                    {...register('service', { required: t('contact.errorServiceRequired') })}
                   >
-                    <InstagramIcon className="size-5" />
-                  </a>
+                    <option value="" disabled>
+                      {t('contact.selectService')}
+                    </option>
+                    {serviceKeys.map((key) => (
+                      <option key={key} value={t(key)}>
+                        {t(key)}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
+
+              <div className="mt-5">
+                <Field label={t('contact.labelMessage')} error={errors.message?.message}>
+                  <textarea
+                    className={cn(fieldClass, 'min-h-36 resize-y')}
+                    placeholder={t('contact.placeholderMessage')}
+                    {...register('message', { required: t('contact.errorMessageRequired') })}
+                  />
+                </Field>
+              </div>
+
+              {/* reCAPTCHA v2 */}
+              <div className="mt-6">
+                <div
+                  className={cn(
+                    'flex flex-col gap-2 rounded-lg border p-4 transition-colors',
+                    recaptchaError
+                      ? 'border-red-300 bg-red-50 dark:border-red-700/30 dark:bg-red-900/20'
+                      : 'border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.04]'
+                  )}
+                >
+                  <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                    <ShieldCheck aria-hidden="true" className="size-3.5 text-primary-500" />
+                    <span>{t('contact.recaptchaLabel')}</span>
+                  </div>
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY ?? ''}
+                    onChange={(token) => {
+                      setRecaptchaToken(token)
+                      if (token) setRecaptchaError(false)
+                    }}
+                    onExpired={() => setRecaptchaToken(null)}
+                    hl={lang}
+                  />
+                  {recaptchaError && (
+                    <span className="text-sm font-medium text-red-600">
+                      {t('contact.recaptchaError')}
+                    </span>
+                  )}
                 </div>
               </div>
-            </div>
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  {t('contact.privacyText')}{' '}
+                  <button
+                    type="button"
+                    onClick={() => setIsPrivacyOpen(true)}
+                    className="font-medium text-primary-600 underline underline-offset-2 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded"
+                  >
+                    {t('contact.privacyLink')}
+                  </button>.
+                </p>
+                <SubmitButton
+                  isReady={isFormReady}
+                  isLoading={submitStatus === 'loading'}
+                  loadingText={t('contact.submitLoading')}
+                  submitText={t('contact.submitButton')}
+                />
+              </div>
+            </form>
           </div>
-
-          <form
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft dark:border-white/10 dark:bg-white/[0.06] dark:shadow-glow sm:p-7"
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-          >
-            {submitStatus === 'success' && (
-              <div
-                className="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900 dark:border-green-700/30 dark:bg-green-900/20 dark:text-green-300"
-                role="status"
-                aria-live="polite"
-              >
-                Благодарим! Вашето запитване беше изпратено успешно. Ще се свържем с Вас скоро.
-              </div>
-            )}
-            
-            {submitStatus === 'error' && (
-              <div
-                className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-900 dark:border-red-700/30 dark:bg-red-900/20 dark:text-red-300"
-                role="status"
-                aria-live="polite"
-              >
-                Възникна грешка при изпращането. Моля, опитайте отново по-късно или се свържете с нас по телефона.
-              </div>
-            )}
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Име" error={errors.name?.message}>
-                <input
-                  className={fieldClass}
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Вашето име"
-                  {...register('name', { required: 'Моля, въведете име.' })}
-                />
-              </Field>
-
-              <Field label="Телефон" error={errors.phone?.message}>
-                <input
-                  className={fieldClass}
-                  type="tel"
-                  autoComplete="tel"
-                  placeholder="08... или +359..."
-                  {...register('phone', {
-                    required: 'Моля, въведете телефон.',
-                    pattern: {
-                      value: /^(?:\+359|0)\d{9}$/,
-                      message: 'Въведете валиден формат (напр. 08... или +359...).',
-                    },
-                  })}
-                />
-              </Field>
-
-              <Field label="Имейл" error={errors.email?.message}>
-                <input
-                  className={fieldClass}
-                  type="email"
-                  autoComplete="email"
-                  placeholder="name@example.com"
-                  {...register('email', {
-                    required: 'Моля, въведете имейл.',
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: 'Въведете валиден имейл.',
-                    },
-                  })}
-                />
-              </Field>
-
-              <Field label="Тип обект" error={errors.objectType?.message}>
-                <select
-                  className={cn(fieldClass, 'appearance-none')}
-                  defaultValue=""
-                  {...register('objectType', { required: 'Изберете тип обект.' })}
-                >
-                  <option value="" disabled>
-                    Изберете
-                  </option>
-                  {objectTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-            </div>
-
-            <div className="mt-5">
-              <Field label="Интересуваща услуга" error={errors.service?.message}>
-                <select
-                  className={cn(fieldClass, 'appearance-none')}
-                  defaultValue=""
-                  {...register('service', { required: 'Изберете услуга.' })}
-                >
-                  <option value="" disabled>
-                    Изберете услуга
-                  </option>
-                  {services.map((service) => (
-                    <option key={service.title} value={service.title}>
-                      {service.title}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-            </div>
-
-            <div className="mt-5">
-              <Field label="Съобщение" error={errors.message?.message}>
-                <textarea
-                  className={cn(fieldClass, 'min-h-36 resize-y')}
-                  placeholder="Опишете обекта, нуждите и предпочитан срок."
-                  {...register('message', { required: 'Моля, добавете съобщение.' })}
-                />
-              </Field>
-            </div>
-
-            {/* reCAPTCHA v2 */}
-            <div className="mt-6">
-              <div
-                className={cn(
-                  'flex flex-col gap-2 rounded-lg border p-4 transition-colors',
-                  recaptchaError
-                    ? 'border-red-300 bg-red-50 dark:border-red-700/30 dark:bg-red-900/20'
-                    : 'border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.04]'
-                )}
-              >
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
-                  <ShieldCheck aria-hidden="true" className="size-3.5 text-primary-500" />
-                  <span>Потвърдете, че не сте робот</span>
-                </div>
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY ?? ''}
-                  onChange={(token) => {
-                    setRecaptchaToken(token)
-                    if (token) setRecaptchaError(false)
-                  }}
-                  onExpired={() => setRecaptchaToken(null)}
-                  hl="bg"
-                />
-                {recaptchaError && (
-                  <span className="text-sm font-medium text-red-600">
-                    Моля, потвърдете, че не сте робот.
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-6 text-slate-500 dark:text-slate-400">
-                Вашите данни са защитени. С изпращането на запитването се съгласявате с нашата{' '}
-                <button
-                  type="button"
-                  onClick={() => setIsPrivacyOpen(true)}
-                  className="font-medium text-primary-600 underline underline-offset-2 transition hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded"
-                >
-                  Политика за поверителност
-                </button>.
-              </p>
-              <SubmitButton isReady={isFormReady} isLoading={submitStatus === 'loading'} />
-            </div>
-          </form>
         </div>
-      </div>
-    </section>
+      </section>
 
       <PrivacyPolicy isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
     </>
@@ -370,7 +392,17 @@ function Field({ children, error, label }: { children: ReactNode; error?: string
   )
 }
 
-function SubmitButton({ isReady, isLoading }: { isReady: boolean; isLoading: boolean }) {
+function SubmitButton({
+  isReady,
+  isLoading,
+  loadingText,
+  submitText,
+}: {
+  isReady: boolean
+  isLoading: boolean
+  loadingText: string
+  submitText: string
+}) {
   return (
     <button
       type="submit"
@@ -382,7 +414,6 @@ function SubmitButton({ isReady, isLoading }: { isReady: boolean; isLoading: boo
           : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none border border-slate-200 dark:bg-white/[0.04] dark:text-slate-500 dark:border-white/10',
       )}
     >
-      {/* Pulse glow — видим само когато е готов */}
       {isReady && !isLoading && (
         <span
           aria-hidden="true"
@@ -393,11 +424,11 @@ function SubmitButton({ isReady, isLoading }: { isReady: boolean; isLoading: boo
         {isLoading ? (
           <>
             <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-            Изпращане...
+            {loadingText}
           </>
         ) : (
           <>
-            Изпрати запитване
+            {submitText}
             <Send
               className={cn(
                 'size-4 transition-all duration-300',

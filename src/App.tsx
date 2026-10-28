@@ -13,6 +13,7 @@ import { ProjectsGalleryModal } from './components/ProjectsGalleryModal'
 import { ProjectsTeaser } from './components/ProjectsTeaser'
 import { ProductsTeaser } from './components/ProductsTeaser'
 import { ProductsCatalogModal } from './components/ProductsCatalogModal'
+import { FeatureHintToast } from './components/ui/FeatureHintToast'
 import { useTheme } from './lib/useTheme'
 
 function App() {
@@ -41,7 +42,6 @@ function App() {
       url.searchParams.set('catalog', 'true')
     } else {
       url.searchParams.delete('catalog')
-      url.searchParams.delete('product')
     }
     
     // Only replace state if it actually changed to avoid spamming history
@@ -58,6 +58,7 @@ function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
       />
+      <FeatureHintToast theme={theme} onToggleTheme={toggleTheme} />
       <main>
         <Hero onOpenCatalog={() => setIsCatalogOpen(true)} />
         <Services />

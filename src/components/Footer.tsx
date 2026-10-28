@@ -1,4 +1,7 @@
 import { Camera, Package, ShieldCheck } from 'lucide-react'
+import { useState } from 'react'
+import { useLanguage } from '../lib/i18n'
+import { PrivacyPolicy } from './PrivacyPolicy'
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -17,9 +20,14 @@ function InstagramIcon({ className }: { className?: string }) {
     </svg>
   )
 }
-import { useState } from 'react'
-import { services } from '../data/content'
-import { PrivacyPolicy } from './PrivacyPolicy'
+
+const footerServiceKeys = [
+  'services.s1.title',
+  'services.s2.title',
+  'services.s3.title',
+  'services.s4.title',
+  'services.s5.title',
+]
 
 interface FooterProps {
   onOpenGallery?: () => void
@@ -29,6 +37,7 @@ interface FooterProps {
 export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
   const year = new Date().getFullYear()
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
+  const { t } = useLanguage()
 
   return (
     <>
@@ -39,7 +48,7 @@ export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
               <a
                 href="#home"
                 className="inline-flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
-                aria-label="DABH Engineering начало"
+                aria-label={t('header.homeLabel')}
               >
                 <span className="flex size-10 items-center justify-center overflow-hidden rounded-md bg-navy-950 shadow-glow">
                   <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-full object-cover" />
@@ -47,11 +56,10 @@ export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
                 <span className="font-semibold">DABH Engineering</span>
               </a>
               <p className="mt-4 max-w-md text-sm leading-6 text-slate-300">
-                Проектиране, изграждане и поддръжка на слаботокови системи за домове,
-                бизнеси и обществени обекти.
+                {t('footer.description')}
               </p>
               <p className="mt-5 text-sm font-semibold text-primary-200">
-                Слаботокови системи • Сигурност • Автоматизация
+                {t('footer.tagline')}
               </p>
               <div className="mt-6 flex items-center gap-4">
                 <a href="https://www.facebook.com/profile.php?id=61572936225566" target="_blank" rel="noreferrer" className="text-slate-400 transition hover:text-primary-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded-md" aria-label="Facebook">
@@ -65,30 +73,30 @@ export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
 
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
-                <h2 className="text-sm font-semibold uppercase text-primary-200">Услуги</h2>
+                <h2 className="text-sm font-semibold uppercase text-primary-200">{t('footer.servicesTitle')}</h2>
                 <ul className="mt-4 grid gap-3 text-sm text-slate-300">
-                  {services.map((service) => (
-                    <li key={service.title}>
+                  {footerServiceKeys.map((key) => (
+                    <li key={key}>
                       <a className="transition hover:text-primary-200" href="#services">
-                        {service.title}
+                        {t(key)}
                       </a>
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h2 className="text-sm font-semibold uppercase text-primary-200">Контакт</h2>
+                <h2 className="text-sm font-semibold uppercase text-primary-200">{t('footer.contactTitle')}</h2>
                 <ul className="mt-4 grid gap-3 text-sm text-slate-300">
                   <li>+359 876 150 800</li>
                   <li>dabhengineering.eu@gmail.com</li>
-                  <li>Област Плевен, България</li>
+                  <li>{t('contact.location')}</li>
                   <li>
                     <button
                       onClick={() => setIsPrivacyOpen(true)}
                       className="flex items-center gap-1.5 text-primary-300 transition hover:text-primary-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded"
                     >
                       <ShieldCheck className="size-3.5 shrink-0" />
-                      Защита на личните данни
+                      {t('footer.privacy')}
                     </button>
                   </li>
                   {onOpenGallery && (
@@ -98,7 +106,7 @@ export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
                         className="flex items-center gap-1.5 text-cyan-300 transition hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded font-medium"
                       >
                         <Camera className="size-3.5 shrink-0" />
-                        Галерия обекти
+                        {t('footer.galleryObjects')}
                       </button>
                     </li>
                   )}
@@ -109,7 +117,7 @@ export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
                         className="flex items-center gap-1.5 text-amber-300 transition hover:text-amber-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 rounded font-medium"
                       >
                         <Package className="size-3.5 shrink-0" />
-                        Каталог продукти
+                        {t('footer.catalogProducts')}
                       </button>
                     </li>
                   )}
@@ -118,7 +126,7 @@ export function Footer({ onOpenGallery, onOpenCatalog }: FooterProps) {
             </div>
           </div>
           <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row">
-            <p>© {year} DABH Engineering Ltd. / ДАБХ Инженеринг ЕООД. Всички права запазени.</p>
+            <p>© {year} DABH Engineering Ltd. / ДАБХ Инженеринг ЕООД. {t('footer.copyright')}</p>
           </div>
         </div>
       </footer>
