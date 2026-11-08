@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Camera, Menu, Package, X } from 'lucide-react'
+import { ArrowRight, Camera, Mail, Menu, Package, Phone, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { navLinks } from '../data/content'
 import { cn } from '../lib/utils'
@@ -44,153 +44,189 @@ export function Header({ onOpenGallery, onOpenCatalog, theme, onToggleTheme }: H
   }, [])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
-      <div className="container-shell">
-        <div className="flex min-h-16 items-center justify-between rounded-lg border border-white/30 bg-white/80 px-3 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-navy-950/80 sm:px-5">
-          <a
-            href="#home"
-            className="flex items-center gap-3 rounded-md py-2 pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
-            onClick={closeMenu}
-            aria-label="DABH Engineering начало"
-          >
-            <span className="flex size-10 items-center justify-center overflow-hidden rounded-md bg-navy-950 shadow-glow">
-              <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-full object-cover" />
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* Top Bar / Микро-лента с контакти */}
+      <div className="border-b border-slate-200/60 bg-white/90 px-3 py-1.5 text-xs text-slate-600 backdrop-blur-md dark:border-white/10 dark:bg-navy-950/90 dark:text-slate-300 sm:px-5">
+        <div className="container-shell flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:inline font-medium text-slate-500 dark:text-slate-400">
+              Слаботокови системи • Сигурност • Автоматизация
             </span>
-            <span className="flex flex-col leading-none">
-              <span className="text-sm font-bold text-navy-950 dark:text-white sm:text-base">DABH Engineering</span>
-              <span className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">ДАБХ Инженеринг</span>
+            <span className="sm:hidden font-medium text-slate-500 dark:text-slate-400">
+              Област Плевен
             </span>
-          </a>
-
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Основна навигация">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href
-
-              return (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
-                    isActive
-                      ? 'bg-primary-50 text-primary-600 dark:bg-primary-300/10 dark:text-primary-300'
-                      : 'text-slate-700 hover:bg-slate-100 hover:text-navy-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
-                  )}
-                >
-                  {link.label}
-                </a>
-              )
-            })}
-            {onOpenGallery && (
-              <button
-                type="button"
-                onClick={onOpenGallery}
-                className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-primary-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:bg-primary-300/10 dark:hover:text-white"
-              >
-                <Camera className="size-4 text-primary-600 dark:text-primary-300" />
-                <span>Галерия</span>
-              </button>
-            )}
-            {onOpenCatalog && (
-              <button
-                type="button"
-                onClick={onOpenCatalog}
-                className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-amber-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 dark:text-slate-300 dark:hover:bg-amber-300/10 dark:hover:text-white"
-              >
-                <Package className="size-4 text-amber-600 dark:text-amber-300" />
-                <span>Каталог</span>
-              </button>
-            )}
-          </nav>
-
-          <div className="hidden items-center gap-3 lg:flex">
-            <ThemeToggle theme={theme} toggle={onToggleTheme} />
-            <Button href="#contact" size="sm" icon={ArrowRight}>
-              Консултация
-            </Button>
           </div>
-
-          <div className="flex items-center gap-2 lg:hidden">
-            <ThemeToggle theme={theme} toggle={onToggleTheme} />
-            <button
-              type="button"
-              className="inline-flex size-11 items-center justify-center rounded-md border border-slate-200 bg-white text-navy-950 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-              aria-label={isOpen ? 'Затвори менюто' : 'Отвори менюто'}
-              aria-expanded={isOpen}
-              onClick={() => setIsOpen((currentState) => !currentState)}
+          <div className="flex items-center gap-3 sm:gap-4 font-semibold">
+            <a
+              href="tel:+359876150800"
+              className="flex items-center gap-1.5 text-slate-700 transition hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded dark:text-slate-200 dark:hover:text-primary-300"
+              title="Обадете се на +359 876 150 800"
             >
-              {isOpen ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
-            </button>
+              <Phone className="size-3.5 text-primary-600 dark:text-primary-300" />
+              <span>+359 876 150 800</span>
+            </a>
+            <span className="text-slate-300 dark:text-slate-700" aria-hidden="true">|</span>
+            <a
+              href="mailto:dabhengineering.eu@gmail.com"
+              className="flex items-center gap-1.5 text-slate-700 transition hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 rounded dark:text-slate-200 dark:hover:text-primary-300"
+              title="Пишете ни: dabhengineering.eu@gmail.com"
+            >
+              <Mail className="size-3.5 text-primary-600 dark:text-primary-300" />
+              <span className="hidden sm:inline">dabhengineering.eu@gmail.com</span>
+              <span className="sm:hidden">Имейл</span>
+            </a>
           </div>
         </div>
+      </div>
 
-        <AnimatePresence>
-          {isOpen ? (
-            <motion.nav
-              aria-label="Мобилна навигация"
-              className="mt-2 overflow-hidden rounded-lg border border-white/30 bg-white/95 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-navy-950/95 lg:hidden"
-              initial={reducedMotion ? false : { opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
+      <div className="px-3 pt-2 sm:px-5">
+        <div className="container-shell">
+          <div className="flex min-h-16 items-center justify-between rounded-lg border border-white/30 bg-white/80 px-3 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-navy-950/80 sm:px-5">
+            <a
+              href="#home"
+              className="flex items-center gap-3 rounded-md py-2 pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+              onClick={closeMenu}
+              aria-label="DABH Engineering начало"
             >
-              <div className="grid gap-1 p-3">
-                {navLinks.map((link) => {
-                  const isActive = activeSection === link.href
+              <span className="flex size-10 items-center justify-center overflow-hidden rounded-md bg-navy-950 shadow-glow">
+                <img src="/logo.jpg" alt="DABH Engineering Logo" className="size-full object-cover" />
+              </span>
+              <span className="flex flex-col leading-none">
+                <span className="text-sm font-bold text-navy-950 dark:text-white sm:text-base">DABH Engineering</span>
+                <span className="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">ДАБХ Инженеринг</span>
+              </span>
+            </a>
 
-                  return (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      className={cn(
-                        'rounded-md px-4 py-3 text-base font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
-                        isActive
-                          ? 'bg-primary-50 text-primary-600 dark:bg-primary-300/10 dark:text-primary-300'
-                          : 'text-slate-700 hover:bg-primary-50 hover:text-navy-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
-                      )}
-                      onClick={closeMenu}
+            <nav className="hidden items-center gap-1 lg:flex" aria-label="Основна навигация">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href
+
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      'rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
+                      isActive
+                        ? 'bg-primary-50 text-primary-600 dark:bg-primary-300/10 dark:text-primary-300'
+                        : 'text-slate-700 hover:bg-slate-100 hover:text-navy-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
+                    )}
+                  >
+                    {link.label}
+                  </a>
+                )
+              })}
+              {onOpenGallery && (
+                <button
+                  type="button"
+                  onClick={onOpenGallery}
+                  className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-primary-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:text-slate-300 dark:hover:bg-primary-300/10 dark:hover:text-white"
+                >
+                  <Camera className="size-4 text-primary-600 dark:text-primary-300" />
+                  <span>Галерия</span>
+                </button>
+              )}
+              {onOpenCatalog && (
+                <button
+                  type="button"
+                  onClick={onOpenCatalog}
+                  className="flex items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-amber-50 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 dark:text-slate-300 dark:hover:bg-amber-300/10 dark:hover:text-white"
+                >
+                  <Package className="size-4 text-amber-600 dark:text-amber-300" />
+                  <span>Каталог</span>
+                </button>
+              )}
+            </nav>
+
+            <div className="hidden items-center gap-3 lg:flex">
+              <ThemeToggle theme={theme} toggle={onToggleTheme} />
+              <Button href="#contact" size="sm" icon={ArrowRight}>
+                Консултация
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-2 lg:hidden">
+              <ThemeToggle theme={theme} toggle={onToggleTheme} />
+              <button
+                type="button"
+                className="inline-flex size-11 items-center justify-center rounded-md border border-slate-200 bg-white text-navy-950 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 dark:border-white/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                aria-label={isOpen ? 'Затвори менюто' : 'Отвори менюто'}
+                aria-expanded={isOpen}
+                onClick={() => setIsOpen((currentState) => !currentState)}
+              >
+                {isOpen ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
+              </button>
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {isOpen ? (
+              <motion.nav
+                aria-label="Мобилна навигация"
+                className="mt-2 overflow-hidden rounded-lg border border-white/30 bg-white/95 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-navy-950/95 lg:hidden"
+                initial={reducedMotion ? false : { opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="grid gap-1 p-3">
+                  {navLinks.map((link) => {
+                    const isActive = activeSection === link.href
+
+                    return (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        className={cn(
+                          'rounded-md px-4 py-3 text-base font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
+                          isActive
+                            ? 'bg-primary-50 text-primary-600 dark:bg-primary-300/10 dark:text-primary-300'
+                            : 'text-slate-700 hover:bg-primary-50 hover:text-navy-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
+                        )}
+                        onClick={closeMenu}
+                      >
+                        {link.label}
+                      </a>
+                    )
+                  })}
+                  {onOpenGallery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeMenu()
+                        onOpenGallery()
+                      }}
+                      className="flex items-center justify-between rounded-md px-4 py-3 text-base font-semibold text-slate-700 hover:bg-primary-50 hover:text-navy-950 transition text-left dark:text-slate-300 dark:hover:bg-primary-300/10 dark:hover:text-white"
                     >
-                      {link.label}
-                    </a>
-                  )
-                })}
-                {onOpenGallery && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      closeMenu()
-                      onOpenGallery()
-                    }}
-                    className="flex items-center justify-between rounded-md px-4 py-3 text-base font-semibold text-slate-700 hover:bg-primary-50 hover:text-navy-950 transition text-left dark:text-slate-300 dark:hover:bg-primary-300/10 dark:hover:text-white"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Camera className="size-4 text-primary-600 dark:text-primary-300" />
-                      <span>Галерия обекти</span>
-                    </span>
-                  </button>
-                )}
-                {onOpenCatalog && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      closeMenu()
-                      onOpenCatalog()
-                    }}
-                    className="flex items-center justify-between rounded-md px-4 py-3 text-base font-semibold text-slate-700 hover:bg-amber-50 hover:text-navy-950 transition text-left dark:text-slate-300 dark:hover:bg-amber-300/10 dark:hover:text-white"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Package className="size-4 text-amber-600 dark:text-amber-300" />
-                      <span>Каталог продукти</span>
-                    </span>
-                  </button>
-                )}
-                <Button href="#contact" className="mt-2 w-full" icon={ArrowRight} onClick={closeMenu}>
-                  Заявете консултация
-                </Button>
-              </div>
-            </motion.nav>
-          ) : null}
-        </AnimatePresence>
+                      <span className="flex items-center gap-2">
+                        <Camera className="size-4 text-primary-600 dark:text-primary-300" />
+                        <span>Галерия обекти</span>
+                      </span>
+                    </button>
+                  )}
+                  {onOpenCatalog && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeMenu()
+                        onOpenCatalog()
+                      }}
+                      className="flex items-center justify-between rounded-md px-4 py-3 text-base font-semibold text-slate-700 hover:bg-amber-50 hover:text-navy-950 transition text-left dark:text-slate-300 dark:hover:bg-amber-300/10 dark:hover:text-white"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Package className="size-4 text-amber-600 dark:text-amber-300" />
+                        <span>Каталог продукти</span>
+                      </span>
+                    </button>
+                  )}
+                  <Button href="#contact" className="mt-2 w-full" icon={ArrowRight} onClick={closeMenu}>
+                    Заявете консултация
+                  </Button>
+                </div>
+              </motion.nav>
+            ) : null}
+          </AnimatePresence>
+        </div>
       </div>
       <div
         className={cn(

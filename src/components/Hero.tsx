@@ -21,7 +21,7 @@ export function Hero({ onOpenCatalog }: HeroProps) {
   return (
     <section
       id="home"
-      className="relative overflow-hidden bg-navy-950 pb-12 pt-28 text-white sm:pt-32 lg:pb-16 lg:pt-36"
+      className="relative overflow-hidden bg-navy-950 pb-12 pt-36 text-white sm:pt-40 lg:pb-16 lg:pt-44"
     >
       <div className="absolute inset-0 technical-grid opacity-90" aria-hidden="true" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-mist to-transparent dark:from-navy-950" aria-hidden="true" />

@@ -6,6 +6,6 @@ import pazaruvajFeedPlugin from './vite-plugin-pazaruvaj'
 export default defineConfig({
   plugins: [
     react(),
-    pazaruvajFeedPlugin({ baseUrl: 'https://tvoy-domein.com' }) // TODO: Смени с реалния домейн
+    pazaruvajFeedPlugin({ baseUrl: 'https://dabh.eu' }) // TODO: Смени с реалния домейн
   ],
 })
