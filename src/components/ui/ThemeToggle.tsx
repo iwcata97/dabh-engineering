@@ -1,4 +1,5 @@
 import { Moon, Sun } from 'lucide-react'
+import { useLanguage } from '../../lib/i18n'
 import { cn } from '../../lib/utils'
 
 interface ThemeToggleProps {
@@ -8,13 +9,14 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ theme, toggle, className }: ThemeToggleProps) {
+  const { t } = useLanguage()
   const isDark = theme === 'dark'
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={isDark ? 'Превключи на светла тема' : 'Превключи на тъмна тема'}
+      aria-label={isDark ? t('theme.light') : t('theme.dark')}
       className={cn(
         'relative inline-flex size-10 items-center justify-center rounded-md border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300',
         isDark

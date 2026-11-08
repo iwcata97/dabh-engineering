@@ -1,8 +1,18 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { values } from '../data/content'
+import { BadgeCheck, Gauge, Lightbulb, Target, Zap } from 'lucide-react'
+import { useLanguage } from '../lib/i18n'
+
+const valueItems = [
+  { titleKey: 'values.v1.title', descKey: 'values.v1.description', icon: BadgeCheck },
+  { titleKey: 'values.v2.title', descKey: 'values.v2.description', icon: Target },
+  { titleKey: 'values.v3.title', descKey: 'values.v3.description', icon: Lightbulb },
+  { titleKey: 'values.v4.title', descKey: 'values.v4.description', icon: Gauge },
+  { titleKey: 'values.v5.title', descKey: 'values.v5.description', icon: Zap },
+]
 
 export function Values() {
   const reducedMotion = useReducedMotion()
+  const { t } = useLanguage()
 
   return (
     <section id="about" className="section-padding relative overflow-hidden bg-navy-950 text-white">
@@ -10,24 +20,22 @@ export function Values() {
       <div className="container-shell relative z-10">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
-            <p className="mb-3 text-sm font-semibold uppercase text-primary-300">За нас</p>
+            <p className="mb-3 text-sm font-semibold uppercase text-primary-300">{t('values.eyebrow')}</p>
             <h2 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
-              Професионален партньор за слаботокови системи и автоматизация
+              {t('values.title')}
             </h2>
             <p className="mt-5 text-lg leading-8 text-slate-300">
-              ДАБХ Инженеринг е компания, специализирана в изграждането и поддръжката на
-              различни слаботокови инсталации. Подходът е индивидуален, иновативен и
-              ориентиран към реалните нужди на клиента.
+              {t('values.description')}
             </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {values.map((value, index) => {
+            {valueItems.map((value, index) => {
               const Icon = value.icon
 
               return (
                 <motion.article
-                  key={value.title}
+                  key={value.titleKey}
                   className="dark-panel rounded-lg p-5"
                   initial={reducedMotion ? false : { opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -37,8 +45,8 @@ export function Values() {
                   <div className="mb-4 flex size-11 items-center justify-center rounded-md bg-primary-300/10 text-primary-200">
                     <Icon aria-hidden="true" className="size-5" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">{value.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{value.description}</p>
+                  <h3 className="text-lg font-semibold text-white">{t(value.titleKey)}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-300">{t(value.descKey)}</p>
                 </motion.article>
               )
             })}

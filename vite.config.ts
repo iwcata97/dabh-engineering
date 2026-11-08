@@ -8,4 +8,7 @@ export default defineConfig({
     react(),
     pazaruvajFeedPlugin({ baseUrl: 'https://dabh.eu' }) // TODO: Смени с реалния домейн
   ],
+  server: {
+    open: true,
+  },
 })

@@ -12,6 +12,125 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { products, type Product } from '../data/products'
+import { useLanguage } from '../lib/i18n'
+
+// ─── Translations Map ─────────────────────────────────────────────────────────
+
+const ALL_CATEGORIES = 'ALL'
+
+const categoryTranslations: Record<string, { bg: string; en: string }> = {
+  'HD-TVI Камери 2MP (1080p)': {
+    bg: 'HD-TVI Камери 2MP (1080p)',
+    en: 'HD-TVI Cameras 2MP (1080p)',
+  },
+  'Еднопостови комплекти': {
+    bg: 'Еднопостови комплекти',
+    en: 'Single-Station Kits',
+  },
+}
+
+const filterKeyTranslations: Record<string, { bg: string; en: string }> = {
+  'Резолюция': { bg: 'Резолюция', en: 'Resolution' },
+  'Тип': { bg: 'Тип', en: 'Type' },
+  'Монтаж': { bg: 'Монтаж', en: 'Mounting' },
+  'Аудио': { bg: 'Аудио', en: 'Audio' },
+  'Обектив': { bg: 'Обектив', en: 'Lens' },
+}
+
+const filterValueTranslations: Record<string, { bg: string; en: string }> = {
+  'Куполна': { bg: 'Куполна', en: 'Dome' },
+  'Цилиндрична': { bg: 'Цилиндрична', en: 'Bullet' },
+  'Външен': { bg: 'Външен', en: 'Outdoor' },
+  'Вътрешен': { bg: 'Вътрешен', en: 'Indoor' },
+  'Без аудио': { bg: 'Без аудио', en: 'No Audio' },
+  'С микрофон': { bg: 'С микрофон', en: 'With Microphone' },
+  'Фиксиран': { bg: 'Фиксиран', en: 'Fixed' },
+  'Моторизиран': { bg: 'Моторизиран', en: 'Motorized' },
+}
+
+const productTranslations: Record<
+  string,
+  {
+    titleEn: string
+    shortDescEn: string
+    fullDescEn?: string
+    categoryEn: string
+    tagsEn: string[]
+  }
+> = {
+  'hikvision-ds-2ce56d0t-it3fc': {
+    titleEn: '2MP Dome Camera – EXIR 40m',
+    shortDescEn: 'HD-TVI dome camera (4 in 1), 2 megapixels, fixed 2.8 mm lens, EXIR up to 40 m, IP66.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Dome', 'IP66', 'EXIR 40m'],
+  },
+  'hikvision-ds-2ce78d0t-it3fs': {
+    titleEn: '2MP Dome Camera – Built-in Mic, CoAx Audio',
+    shortDescEn: 'HD-TVI dome camera (4 in 1), 2 megapixels, built-in mic, 3.6 mm lens, EXIR up to 40 m.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Dome', 'Microphone', 'CoAx Audio'],
+  },
+  'hikvision-ds-2ce76d0t-itmf': {
+    titleEn: '2MP Dome Camera – EXIR 30m, Black Housing',
+    shortDescEn: 'HD-TVI dome camera (4 in 1), 2 megapixels, 2.8 mm lens, EXIR up to 30 m, black housing.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Dome', 'IP67', 'Black Housing'],
+  },
+  'hikvision-ds-2ce16d0t-itfc': {
+    titleEn: '2MP Bullet Camera – EXIR 30m',
+    shortDescEn: 'HD-TVI bullet camera (4 in 1), 2 megapixels, fixed 2.8 mm lens, EXIR up to 30 m, IP67.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Bullet', 'IP67', 'EXIR 30m'],
+  },
+  'hikvision-ds-2ce16d0t-itfs': {
+    titleEn: '2MP Bullet Camera – Built-in Mic, CoAx Audio',
+    shortDescEn: 'HD-TVI bullet camera (4 in 1), 2 megapixels, built-in mic, 2.8 mm lens, EXIR up to 30 m.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Bullet', 'Microphone', 'CoAx Audio'],
+  },
+  'hikvision-ds-2ce17d0t-it5fc': {
+    titleEn: '2MP Bullet Camera – EXIR 80m Long Range',
+    shortDescEn: 'HD-TVI bullet camera (4 in 1), 2 megapixels, 3.6 mm lens, EXIR up to 80 m, IP67.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Bullet', 'EXIR 80m', 'Long Range'],
+  },
+  'hikvision-ds-2ce56d0t-it3zf': {
+    titleEn: '2MP Dome Camera – Motorized Varifocal 2.7-13.5mm',
+    shortDescEn: 'HD-TVI dome camera (4 in 1), 2 megapixels, motorized zoom 2.7-13.5 mm, EXIR up to 70 m.',
+    categoryEn: 'HD-TVI Cameras 2MP (1080p)',
+    tagsEn: ['Dome', 'Motorized Zoom', 'EXIR 70m'],
+  },
+  'hikvision-ds-kis613-s': {
+    titleEn: 'Villa IP Video Intercom Kit – Stainless Steel',
+    shortDescEn: 'Complete IP video intercom kit: stainless steel door station with camera and RFID, 7" touch monitor, PoE switch.',
+    categoryEn: 'Single-Station Kits',
+    tagsEn: ['IP Intercom', 'Touch Screen', 'Stainless Steel'],
+  },
+  'hikvision-ds-kis610-p': {
+    titleEn: 'Villa IP Video Intercom Kit – Standard',
+    shortDescEn: 'IP video intercom kit with door station, 7" indoor station and standard PoE power supply.',
+    categoryEn: 'Single-Station Kits',
+    tagsEn: ['IP Intercom', '7" Monitor', 'PoE'],
+  },
+  'hikvision-ds-kis602b': {
+    titleEn: 'Modular IP Video Intercom Kit',
+    shortDescEn: 'Modular 2-wire / IP video intercom kit with 2MP fisheye camera, 7" indoor touch station, and distributor.',
+    categoryEn: 'Single-Station Kits',
+    tagsEn: ['Modular', 'Fisheye', '2-Wire/IP'],
+  },
+  'hikvision-ds-kis603-pc': {
+    titleEn: 'Villa IP Video Intercom Kit – Surface Mount',
+    shortDescEn: 'IP video intercom kit: plastic surface door station with RFID, 7" indoor touch monitor, PoE.',
+    categoryEn: 'Single-Station Kits',
+    tagsEn: ['IP Intercom', 'RFID', 'PoE'],
+  },
+  'hikvision-ds-kis604-sc': {
+    titleEn: 'Villa IP Video Intercom Kit – Metal Door Station',
+    shortDescEn: 'High-end IP video intercom kit with metal alloy outdoor station, 7" touch monitor, mobile app unlock.',
+    categoryEn: 'Single-Station Kits',
+    tagsEn: ['IP Intercom', 'Metal Station', 'Mobile App'],
+  },
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -21,9 +140,8 @@ interface ProductsCatalogModalProps {
   initialProductId?: string
 }
 
-const ALL_CATEGORIES = 'Всички'
-
 export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: ProductsCatalogModalProps) {
+  const { t, lang } = useLanguage()
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES)
   const [detailProduct, setDetailProduct] = useState<Product | null>(null)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
@@ -33,7 +151,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
   // Initialize product if passed via props
   useEffect(() => {
     if (isOpen && initialProductId && !detailProduct) {
-      const product = products.find(p => p.id === initialProductId)
+      const product = products.find((p) => p.id === initialProductId)
       if (product) {
         setDetailProduct(product)
         setActiveCategory(product.category)
@@ -55,10 +173,8 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
     }
   }, [detailProduct, isOpen])
 
-  const categories = [
-    ALL_CATEGORIES,
-    ...Array.from(new Set(products.map((p) => p.category))),
-  ]
+  const rawCategories = Array.from(new Set(products.map((p) => p.category)))
+  const categories = [ALL_CATEGORIES, ...rawCategories]
 
   // Clear filters when category changes
   useEffect(() => {
@@ -85,7 +201,6 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
 
     const result: Record<string, string[]> = {}
     Object.keys(filtersObj).forEach((key) => {
-      // Sort specific keys if needed, else alphabetical
       result[key] = Array.from(filtersObj[key]).sort()
     })
     return result
@@ -176,29 +291,73 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
     return () => window.removeEventListener('keydown', handler)
   }, [isOpen, detailProduct, navigateDetail])
 
+  const getProductData = (p: Product) => {
+    if (lang === 'en' && productTranslations[p.id]) {
+      const trans = productTranslations[p.id]
+      return {
+        title: trans.titleEn,
+        shortDescription: trans.shortDescEn,
+        fullDescription: trans.fullDescEn ?? p.fullDescription,
+        category: trans.categoryEn,
+        tags: trans.tagsEn,
+        price: p.price === 'Очаквайте скоро' ? t('catalog.comingSoon') : p.price,
+      }
+    }
+    return {
+      title: p.title,
+      shortDescription: p.shortDescription,
+      fullDescription: p.fullDescription,
+      category: p.category,
+      tags: p.tags,
+      price: p.price === 'Очаквайте скоро' ? t('catalog.comingSoon') : p.price,
+    }
+  }
+
+  const getCategoryLabel = (cat: string) => {
+    if (cat === ALL_CATEGORIES) return t('catalog.allCategories')
+    if (categoryTranslations[cat]) {
+      return lang === 'en' ? categoryTranslations[cat].en : categoryTranslations[cat].bg
+    }
+    return cat
+  }
+
+  const getFilterKeyLabel = (key: string) => {
+    if (filterKeyTranslations[key]) {
+      return lang === 'en' ? filterKeyTranslations[key].en : filterKeyTranslations[key].bg
+    }
+    return key
+  }
+
+  const getFilterValueLabel = (value: string) => {
+    if (filterValueTranslations[value]) {
+      return lang === 'en' ? filterValueTranslations[value].en : filterValueTranslations[value].bg
+    }
+    return value
+  }
+
   // Reusable Filter Content
   const renderFilterPanel = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-navy-950 dark:text-white">Филтри</h3>
+        <h3 className="text-sm font-bold text-navy-950 dark:text-white">{t('catalog.filters')}</h3>
         {activeFiltersCount > 0 && (
           <button
             onClick={clearAllFilters}
             className="text-xs font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
           >
-            Изчисти
+            {t('catalog.clearFilters')}
           </button>
         )}
       </div>
 
       <div className="space-y-5">
         {Object.entries(availableFilters).map(([key, values]) => {
-          if (values.length <= 1) return null // Hide filter if only one or zero options available
+          if (values.length <= 1) return null
 
           return (
             <div key={key}>
               <h4 className="mb-2.5 text-xs font-bold text-slate-500 uppercase tracking-wider dark:text-slate-400">
-                {key}
+                {getFilterKeyLabel(key)}
               </h4>
               <div className="space-y-2">
                 {values.map((value) => {
@@ -222,7 +381,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                         <Check className="size-3" strokeWidth={3} />
                       </div>
                       <span className="text-sm font-medium text-slate-700 group-hover:text-navy-950 dark:text-slate-300 dark:group-hover:text-white transition-colors leading-tight">
-                        {value}
+                        {getFilterValueLabel(value)}
                       </span>
                     </label>
                   )
@@ -273,16 +432,16 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                     id="catalog-modal-title"
                     className="text-base font-bold text-white sm:text-lg truncate"
                   >
-                    Каталог продукти
+                    {t('catalog.title')}
                   </h1>
                   <p className="text-xs text-slate-400 hidden sm:block">
-                    Артикули от ДАБХ Инженеринг — Hikvision
+                    {t('catalog.subtitle')}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                aria-label="Затвори каталога"
+                aria-label={t('catalog.close')}
                 className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-slate-300 transition-colors hover:bg-white/20 hover:text-white"
               >
                 <X className="size-4" />
@@ -302,7 +461,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-navy-950 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:bg-white/[0.12] dark:hover:text-white'
                     }`}
                   >
-                    {cat}
+                    {getCategoryLabel(cat)}
                   </button>
                 ))}
               </div>
@@ -313,7 +472,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   className="lg:hidden flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:border-white/15 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15"
                 >
                   <Filter className="size-3.5" />
-                  Филтри
+                  {t('catalog.filters')}
                   {activeFiltersCount > 0 && (
                     <span className="flex size-4 items-center justify-center rounded-full bg-primary-500 text-[9px] text-white">
                       {activeFiltersCount}
@@ -321,7 +480,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   )}
                 </button>
                 <span className="hidden sm:block text-xs font-medium text-slate-500 dark:text-slate-400">
-                  Намерени: <strong className="text-navy-950 dark:text-white">{filtered.length}</strong>
+                  {t('catalog.found')}: <strong className="text-navy-950 dark:text-white">{filtered.length}</strong>
                 </span>
               </div>
             </div>
@@ -337,28 +496,33 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
               <div className="flex-1 overflow-y-auto p-5 sm:p-7">
                 {filtered.length > 0 ? (
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {filtered.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        onOpen={() => openDetail(product)}
-                      />
-                    ))}
+                    {filtered.map((product) => {
+                      const data = getProductData(product)
+                      return (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          displayData={data}
+                          viewDetailsText={t('catalog.viewDetails')}
+                          onOpen={() => openDetail(product)}
+                        />
+                      )
+                    })}
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-center py-12">
                     <div className="flex size-16 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 mb-4">
                       <Filter className="size-8 text-slate-300 dark:text-slate-600" />
                     </div>
-                    <h3 className="text-lg font-bold text-navy-950 dark:text-white">Няма намерени продукти</h3>
+                    <h3 className="text-lg font-bold text-navy-950 dark:text-white">{t('catalog.noProducts')}</h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
-                      Опитайте да промените филтрите или да изберете друга категория.
+                      {t('catalog.noProductsHint')}
                     </p>
                     <button
                       onClick={clearAllFilters}
                       className="mt-6 rounded-xl bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-300 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20"
                     >
-                      Изчисти филтрите
+                      {t('catalog.clearAllFilters')}
                     </button>
                   </div>
                 )}
@@ -368,14 +532,14 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
             {/* ── Footer ── */}
             <div className="shrink-0 bg-white border-t border-slate-200 px-6 py-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 dark:bg-graphite-900 dark:border-white/10">
               <p className="text-xs text-slate-500 text-center sm:text-left dark:text-slate-400">
-                Имате въпроси за някой продукт? Свържете се с нас за повече информация.
+                {t('catalog.footerText')}
               </p>
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button
                   onClick={onClose}
                   className="w-1/2 sm:w-auto rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:border-white/15 dark:text-slate-200 dark:hover:bg-white/10"
                 >
-                  Затвори
+                  {t('catalog.closeBtn')}
                 </button>
                 <button
                   onClick={() => {
@@ -388,7 +552,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   }}
                   className="w-1/2 sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-navy-950 px-5 py-2 text-xs font-bold text-white transition-colors hover:bg-navy-800 dark:bg-primary-500 dark:text-navy-950 dark:hover:bg-primary-400"
                 >
-                  Запитване
+                  {t('catalog.inquiry')}
                   <ArrowRight className="size-3.5 text-primary-300 dark:text-navy-950" />
                 </button>
               </div>
@@ -415,10 +579,11 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-navy-950">
-                    <h3 className="font-bold text-navy-950 dark:text-white">Филтри</h3>
+                    <h3 className="font-bold text-navy-950 dark:text-white">{t('catalog.filters')}</h3>
                     <button
                       onClick={() => setShowMobileFilters(false)}
                       className="p-1 rounded-md text-slate-400 hover:bg-slate-200 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-white"
+                      aria-label={t('catalog.close')}
                     >
                       <X className="size-5" />
                     </button>
@@ -431,7 +596,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                       onClick={() => setShowMobileFilters(false)}
                       className="w-full rounded-xl bg-primary-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-700 dark:bg-primary-500 dark:text-navy-950 dark:hover:bg-primary-400"
                     >
-                      Покажи {filtered.length} резултата
+                      {t('catalog.showResults')} {filtered.length} {t('catalog.results')}
                     </button>
                   </div>
                 </motion.div>
@@ -462,7 +627,7 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                   <div className="relative flex-1 overflow-hidden bg-black min-h-0">
                     <img
                       src={detailProduct.image}
-                      alt={detailProduct.title}
+                      alt={getProductData(detailProduct).title}
                       className="h-full max-h-[50vh] w-full object-contain"
                     />
 
@@ -470,14 +635,14 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                     <button
                       onClick={() => navigateDetail('prev')}
                       className="absolute left-3 top-1/2 -translate-y-1/2 flex size-10 items-center justify-center rounded-full bg-black/70 text-white transition-colors hover:bg-black/90"
-                      aria-label="Предишен продукт"
+                      aria-label={t('catalog.prevProduct')}
                     >
                       <ChevronLeft className="size-5" />
                     </button>
                     <button
                       onClick={() => navigateDetail('next')}
                       className="absolute right-3 top-1/2 -translate-y-1/2 flex size-10 items-center justify-center rounded-full bg-black/70 text-white transition-colors hover:bg-black/90"
-                      aria-label="Следващ продукт"
+                      aria-label={t('catalog.nextProduct')}
                     >
                       <ChevronRight className="size-5" />
                     </button>
@@ -486,71 +651,76 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
                     <button
                       onClick={closeDetail}
                       className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-xl bg-black/70 text-white transition-colors hover:bg-black/90"
-                      aria-label="Затвори"
+                      aria-label={t('catalog.closeBtn')}
                     >
                       <X className="size-4" />
                     </button>
                   </div>
 
                   {/* Info panel */}
-                  <div className="shrink-0 p-5 sm:p-6 overflow-y-auto max-h-[40vh]">
-                    <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <span className="inline-block rounded-full bg-primary-500/20 px-2.5 py-0.5 text-xs font-bold text-primary-300">
-                        {detailProduct.category}
-                      </span>
-                      <span className="inline-block rounded-full bg-slate-700 px-2.5 py-0.5 text-xs font-semibold text-slate-300">
-                        {detailProduct.brand}
-                      </span>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2.5 py-0.5 text-xs font-bold text-amber-300">
-                        <Clock className="size-3" />
-                        {detailProduct.price}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base font-bold text-white sm:text-lg">
-                      {detailProduct.title}
-                    </h3>
-                    <p className="mt-1 text-xs font-mono text-slate-400">
-                      Модел: {detailProduct.model}
-                    </p>
-                    <p className="mt-3 text-sm text-slate-300 leading-relaxed">
-                      {detailProduct.fullDescription}
-                    </p>
-
-                    {/* Specs */}
-                    {detailProduct.specs && detailProduct.specs.length > 0 && (
-                      <div className="mt-4">
-                        <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">
-                          Основни характеристики
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                          {detailProduct.specs.map((spec) => (
-                            <div
-                              key={spec}
-                              className="flex items-center gap-2 text-xs text-slate-200"
-                            >
-                              <span className="size-1.5 rounded-full bg-primary-400 shrink-0" />
-                              {spec}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Tags */}
-                    {detailProduct.tags && detailProduct.tags.length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-1.5">
-                        {detailProduct.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-md bg-white/10 px-2 py-0.5 text-xs text-slate-300"
-                          >
-                            {tag}
+                  {(() => {
+                    const data = getProductData(detailProduct)
+                    return (
+                      <div className="shrink-0 p-5 sm:p-6 overflow-y-auto max-h-[40vh]">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                          <span className="inline-block rounded-full bg-primary-500/20 px-2.5 py-0.5 text-xs font-bold text-primary-300">
+                            {data.category}
                           </span>
-                        ))}
+                          <span className="inline-block rounded-full bg-slate-700 px-2.5 py-0.5 text-xs font-semibold text-slate-300">
+                            {detailProduct.brand}
+                          </span>
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2.5 py-0.5 text-xs font-bold text-amber-300">
+                            <Clock className="size-3" />
+                            {data.price}
+                          </span>
+                        </div>
+
+                        <h3 className="text-base font-bold text-white sm:text-lg">
+                          {data.title}
+                        </h3>
+                        <p className="mt-1 text-xs font-mono text-slate-400">
+                          {t('catalog.model')}: {detailProduct.model}
+                        </p>
+                        <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+                          {data.fullDescription}
+                        </p>
+
+                        {/* Specs */}
+                        {detailProduct.specs && detailProduct.specs.length > 0 && (
+                          <div className="mt-4">
+                            <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">
+                              {t('catalog.mainSpecs')}
+                            </h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                              {detailProduct.specs.map((spec) => (
+                                <div
+                                  key={spec}
+                                  className="flex items-center gap-2 text-xs text-slate-200"
+                                >
+                                  <span className="size-1.5 rounded-full bg-primary-400 shrink-0" />
+                                  {spec}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tags */}
+                        {data.tags && data.tags.length > 0 && (
+                          <div className="mt-4 flex flex-wrap gap-1.5">
+                            {data.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="rounded-md bg-white/10 px-2 py-0.5 text-xs text-slate-300"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    )
+                  })()}
                 </motion.div>
               </motion.div>
             )}
@@ -565,9 +735,20 @@ export function ProductsCatalogModal({ isOpen, onClose, initialProductId }: Prod
 
 function ProductCard({
   product,
+  displayData,
+  viewDetailsText,
   onOpen,
 }: {
   product: Product
+  displayData: {
+    title: string
+    shortDescription: string
+    fullDescription: string
+    category: string
+    tags?: string[]
+    price: string
+  }
+  viewDetailsText: string
   onOpen: () => void
 }) {
   return (
@@ -580,7 +761,7 @@ function ProductCard({
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
         <img
           src={product.image}
-          alt={product.title}
+          alt={displayData.title}
           className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           loading="eager"
           decoding="async"
@@ -593,12 +774,12 @@ function ProductCard({
         </div>
         {/* Category badge */}
         <span className="absolute top-3 left-3 max-w-[calc(100%-24px)] truncate rounded-lg bg-navy-950/80 px-2.5 py-1 text-[11px] font-bold text-primary-300 backdrop-blur-sm border border-white/10">
-          {product.category}
+          {displayData.category}
         </span>
         {/* Price badge */}
         <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-lg bg-amber-500/90 px-2.5 py-1 text-[11px] font-bold text-navy-950">
           <Clock className="size-3 shrink-0" />
-          <span className="truncate">{product.price}</span>
+          <span className="truncate">{displayData.price}</span>
         </span>
       </div>
 
@@ -612,14 +793,14 @@ function ProductCard({
           <span className="text-[10px] font-mono text-slate-400 dark:text-slate-400">{product.model}</span>
         </div>
         <h3 className="text-sm font-bold text-navy-950 leading-snug transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-300">
-          {product.title}
+          {displayData.title}
         </h3>
         <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2 dark:text-slate-400">
-          {product.shortDescription}
+          {displayData.shortDescription}
         </p>
-        {product.tags && product.tags.length > 0 && (
+        {displayData.tags && displayData.tags.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1">
-            {product.tags.slice(0, 2).map((tag) => (
+            {displayData.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
                 className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-white/[0.06] dark:text-slate-300"
@@ -628,15 +809,15 @@ function ProductCard({
                 {tag}
               </span>
             ))}
-            {product.tags.length > 2 && (
+            {displayData.tags.length > 2 && (
               <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-400 dark:bg-white/[0.06] dark:text-slate-400">
-                +{product.tags.length - 2}
+                +{displayData.tags.length - 2}
               </span>
             )}
           </div>
         )}
         <div className="mt-auto pt-3 flex items-center gap-1 text-xs font-semibold text-primary-600 opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:text-primary-300">
-          <span>Виж детайли</span>
+          <span>{viewDetailsText}</span>
           <ChevronRight className="size-3.5" />
         </div>
       </div>
